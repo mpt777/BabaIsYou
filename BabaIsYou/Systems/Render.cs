@@ -49,7 +49,7 @@ namespace BabaIsYou.Systems
         {
             var sprite = entity.GetComponent<Components.Sprite>();
             var position = entity.GetComponent<Components.Position>();
-            m_spriteBatch.Draw(sprite.sprite, new Rectangle((position.x * GRID_SIZE) + OFFSET_X, (position.y * GRID_SIZE) + OFFSET_Y, GRID_SIZE, GRID_SIZE), sprite.fill);
+            m_spriteBatch.Draw(sprite.sprite, new Rectangle((position.x * GRID_SIZE) + OFFSET_X, (position.y * GRID_SIZE) + OFFSET_Y, GRID_SIZE, GRID_SIZE), sprite.Bounds(), sprite.fill);
         }
     }
 }

@@ -66,9 +66,20 @@ namespace BabaIsYou.Systems
 
         private void ProcessSentence(Sentence sentence)
         {
-            if (sentence.words.Count == 3)
+            if (sentence.words.Count >= 3)
             {
-                UpdateRule((NounType)sentence.words[0].nounType, (PropertyType)sentence.words[2].propertyType);
+                if (sentence.words[1].verbType == null) { return; }
+
+                if (sentence.words[0].nounType != null && sentence.words[2].propertyType != null)
+                {
+                    UpdateRule((NounType)sentence.words[0].nounType, (PropertyType)sentence.words[2].propertyType);
+                    return;
+                }
+                if (sentence.words[0].nounType != null && sentence.words[2].nounType != null)
+                {
+                    UpdateRule((NounType)sentence.words[0].nounType, (PropertyType)sentence.words[2].nounType);
+                    return;
+                }
             }
         }
 
@@ -77,7 +88,7 @@ namespace BabaIsYou.Systems
             foreach (Entity entity in m_entities.Values)
             {
                 if (entity.HasComponent<Property>() && entity.HasComponent<Noun>()) {
-                    if (entity.GetComponent<Noun>().nounType == NounType.Rock)
+                    if (entity.GetComponent<Noun>().nounType != NounType.BigBlue && entity.GetComponent<Noun>().nounType != NounType.Text)
                     {
                         entity.GetComponent<Property>().Clear();
                     }
@@ -85,7 +96,7 @@ namespace BabaIsYou.Systems
             }
 
         }
-
+        
         private void UpdateRule(NounType nounType, PropertyType propertyType)
         {
             foreach (Entity entity in m_entities.Values)
@@ -99,6 +110,13 @@ namespace BabaIsYou.Systems
 
                 var property = entity.GetComponent<Property>();
                 property.propertyType = propertyType;
+
+            }
+        }
+        private void UpdateRule(NounType nounType1, NounType nounType2)
+        {
+            foreach (Entity entity in m_entities.Values)
+            {
 
             }
         }

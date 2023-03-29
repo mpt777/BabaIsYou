@@ -14,6 +14,8 @@ namespace BabaIsYou.Systems
         private int _width;
         private int _height;
         private Tileset _tileSet;
+        private bool _hasUpdated = false;
+
         public Movement(Tileset tileSet) 
         {
             this._tileSet = tileSet;
@@ -22,10 +24,15 @@ namespace BabaIsYou.Systems
         }
         public override void Update(GameTime gameTime)
         {
+            this._hasUpdated = false;
             foreach (var entity in m_entities.Values)
             {
                 MoveEntity(entity, gameTime);
             }
+        }
+        public bool HasUpdated()
+        {
+            return this._hasUpdated;
         }
 
         private void MoveEntity(Entity entity, GameTime gameTime)
@@ -58,6 +65,7 @@ namespace BabaIsYou.Systems
 
         private void Move(Entity entity, int xIncrement, int yIncrement)
         {
+            this._hasUpdated = true;
             var position = entity.GetComponent<Components.Position>();
             position.direction = Components.Direction.Stopped;
 
@@ -93,18 +101,27 @@ namespace BabaIsYou.Systems
                 {
                     continue;
                 }
+                var otherPosition = otherEntity.GetComponent<Components.Position>();
+
+                if (otherPosition.x != position.x || otherPosition.y != position.y)
+                {
+                    continue;
+                }
+
                 var property = otherEntity.GetComponent<Components.Property>();
                 if (property.propertyType == PropertyType.Pushable)
                 {
-                    var otherPosition = otherEntity.GetComponent<Components.Position>();
-                    if (otherPosition.x == position.x && otherPosition.y == position.y)
+                    if (!ProcessMovement(otherEntity, xIncrement, yIncrement))
                     {
-                        if (!ProcessMovement(otherEntity, xIncrement, yIncrement))
-                        {
-                            Increment(position, -xIncrement, -yIncrement);
-                            return false;
-                        }
+                        Increment(position, -xIncrement, -yIncrement);
+                        return false;
                     }
+                }
+
+                if (property.propertyType == PropertyType.Stop)
+                {
+                    Increment(position, -xIncrement, -yIncrement);
+                    return false;
                 }
 
             }

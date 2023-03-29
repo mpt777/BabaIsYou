@@ -4,6 +4,7 @@ using BabaIsYou.Views;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 using System.Collections.Generic;
 
 namespace BabaIsYou
@@ -25,6 +26,7 @@ namespace BabaIsYou
         private Systems.Input m_sysKeyboardInput;
         private Systems.Movement m_sysMovement;
         private Systems.Rule m_sysRule;
+        private Systems.AnimatedSprite m_sysAnimatedSprite;
 
         private Systems.Tileset m_sysTileSet;
 
@@ -50,6 +52,7 @@ namespace BabaIsYou
             m_sysKeyboardInput = new Systems.Input();
             m_sysMovement = new Systems.Movement(m_sysTileSet);
             m_sysRule = new Systems.Rule(m_sysTileSet);
+            m_sysAnimatedSprite = new Systems.AnimatedSprite();
 
             Texture2D _sprite = new Texture2D(GraphicsDevice, 1, 1);
             _sprite.SetData(new[] { Color.White });
@@ -57,17 +60,16 @@ namespace BabaIsYou
 
 
 
-
             Entity block = new Entity();
             block.Add(new Position(1, 1));
-            block.Add(new Sprite(_sprite, Color.Tan));
+            block.Add(new Sprite(Content.Load<Texture2D>("Things/rock"), Color.Tan, 3));
             block.Add(new Property(PropertyType.Pushable));
             block.Add(new Noun(NounType.Rock));
             AddEntity(block);
 
             Entity block1 = new Entity();
             block1.Add(new Position(2, 1));
-            block1.Add(new Sprite(_sprite, Color.Gray));
+            block1.Add(new Sprite(Content.Load<Texture2D>("Words/word-rock"), Color.Tan, 3));
             block1.Add(new Property(PropertyType.Pushable));
             block1.Add(new Text(TextType.Noun, NounType.Rock));
             block1.Add(new Noun(NounType.Text));
@@ -75,7 +77,7 @@ namespace BabaIsYou
 
             Entity block2 = new Entity();
             block2.Add(new Position(3, 1));
-            block2.Add(new Sprite(_sprite, Color.Black));
+            block2.Add(new Sprite(Content.Load<Texture2D>("Words/word-is"), Color.White, 3));
             block2.Add(new Property(PropertyType.Pushable));
             block2.Add(new Text(TextType.Verb, VerbType.Is));
             block2.Add(new Noun(NounType.Text));
@@ -83,19 +85,47 @@ namespace BabaIsYou
 
             Entity block3 = new Entity();
             block3.Add(new Position(4, 1));
-            block3.Add(new Sprite(_sprite, Color.PeachPuff));
+            block3.Add(new Sprite(Content.Load<Texture2D>("Words/word-push"), Color.Gray, 3));
             block3.Add(new Property(PropertyType.Pushable));
             block3.Add(new Text(TextType.Adjective, PropertyType.Pushable));
             block3.Add(new Noun(NounType.Text));
             AddEntity(block3);
 
-            Entity e = new Entity();
-            e.Add(new Position(0, 0));
-            e.Add(new Sprite(_sprite, Color.White));
-            e.Add(new Input(new Dictionary<Keys, Direction> { { Keys.Up, Direction.Up }, { Keys.Right, Direction.Right }, { Keys.Down, Direction.Down }, { Keys.Left, Direction.Left } }));
-            e.Add(new Property(PropertyType.You));
-            e.Add(new Noun(NounType.BigBlue));
-            AddEntity(e);
+
+            Entity block4 = new Entity();
+            block4.Add(new Position(5, 4));
+            block4.Add(new Sprite(Content.Load<Texture2D>("Words/word-wall"), Color.Gray, 3));
+            block4.Add(new Property(PropertyType.Pushable));
+            block4.Add(new Text(TextType.Noun, NounType.Wall));
+            block4.Add(new Noun(NounType.Text));
+            AddEntity(block4);
+
+
+            Entity block5 = new Entity();
+            block5.Add(new Position(6, 4));
+            block5.Add(new Sprite(Content.Load<Texture2D>("Words/word-is"), Color.Gray, 3));
+            block5.Add(new Property(PropertyType.Pushable));
+            block5.Add(new Text(TextType.Verb, VerbType.Is));
+            block5.Add(new Noun(NounType.Text));
+            AddEntity(block5);
+
+
+            Entity block6 = new Entity();
+            block6.Add(new Position(7, 4));
+            block6.Add(new Sprite(Content.Load<Texture2D>("Words/word-stop"), Color.Gray, 3));
+            block6.Add(new Property(PropertyType.Pushable));
+            block6.Add(new Text(TextType.Adjective, PropertyType.Stop));
+            block6.Add(new Noun(NounType.Text));
+            AddEntity(block6);
+
+            Entity block7 = new Entity();
+            block7.Add(new Position(8, 5));
+            block7.Add(new Sprite(Content.Load<Texture2D>("Things/wall"), Color.Gray, 3));
+            block7.Add(new Property(PropertyType.Stop));
+            block7.Add(new Noun(NounType.Wall));
+            AddEntity(block7);
+
+            AddEntity(new BabaET().CreateEntity(this));
 
             m_sysTileSet.FillTileSet();
         }
@@ -132,7 +162,13 @@ namespace BabaIsYou
             m_sysMovement.Update(gameTime);
             m_sysTileSet.BuildTileSet();
             m_sysTileSet.FillTileSet();
-            m_sysRule.Update(gameTime);
+
+            if (m_sysMovement.HasUpdated())
+            {
+                m_sysRule.Update(gameTime);
+            }
+            
+            m_sysAnimatedSprite.Update(gameTime);
             
         }
 
@@ -144,7 +180,6 @@ namespace BabaIsYou
 
             base.Draw(gameTime);
             m_sysRenderer.Update(gameTime);
-            m_sysRule.Update(gameTime);
 
         }
 
@@ -155,6 +190,7 @@ namespace BabaIsYou
             m_sysMovement.Add(entity);
             m_sysRule.Add(entity);
             m_sysTileSet.Add(entity);
+            m_sysAnimatedSprite.Add(entity);
         }
 
         private void RemoveEntity(Entity entity)
@@ -164,6 +200,7 @@ namespace BabaIsYou
             m_sysMovement.Remove(entity.Id);
             m_sysRule.Remove(entity.Id);
             m_sysTileSet.Remove(entity.Id);
+            m_sysAnimatedSprite.Remove(entity.Id);
         }
     }
 }

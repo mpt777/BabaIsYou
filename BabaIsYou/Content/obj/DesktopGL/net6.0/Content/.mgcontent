@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SourceFileCollection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Profile>Reach</Profile>
+  <Platform>DesktopGL</Platform>
+  <Config />
+  <SourceFiles>
+    <File>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/Background/floor.png</File>
+    <File>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/Background/flowers.png</File>
+    <File>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/Background/grass.png</File>
+    <File>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/Background/hedge.png</File>
+    <File>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/Things/baba.png</File>
+    <File>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/Things/flag.png</File>
+    <File>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/Things/lava.png</File>
+    <File>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/Things/rock.png</File>
+    <File>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/Things/wall.png</File>
+    <File>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/Things/water.png</File>
+    <File>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/Words/word-baba.png</File>
+    <File>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/Words/word-flag.png</File>
+    <File>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/Words/word-is.png</File>
+    <File>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/Words/word-kill.png</File>
+    <File>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/Words/word-lava.png</File>
+    <File>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/Words/word-push.png</File>
+    <File>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/Words/word-rock.png</File>
+    <File>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/Words/word-sink.png</File>
+    <File>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/Words/word-stop.png</File>
+    <File>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/Words/word-wall.png</File>
+    <File>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/Words/word-water.png</File>
+    <File>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/Words/word-win.png</File>
+    <File>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/Words/word-you.png</File>
+  </SourceFiles>
+  <DestFiles>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+  </DestFiles>
+</SourceFileCollection>
