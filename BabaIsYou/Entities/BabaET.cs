@@ -14,7 +14,9 @@ namespace BabaIsYou.Entities
 {
     public class BabaET : EntityType
     {
-        override public Entity CreateEntity(Game1 game)
+        public new string fileLetter = "b";
+        public new NounType nounType = NounType.BigBlue;
+        override public Entity CreateEntity(Game1 game, int x, int y)
         {
             Entity e = new Entity();
             e.Add(new Position(0, 0));

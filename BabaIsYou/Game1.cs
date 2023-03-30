@@ -30,6 +30,15 @@ namespace BabaIsYou
 
         private Systems.Tileset m_sysTileSet;
 
+        public Dictionary<NounType, EntityType> nounTypeLookup = new Dictionary<NounType, EntityType> { 
+            { NounType.BigBlue, new BabaET() },
+            { NounType.Wall, new WallET() },
+            { NounType.Rock, new RockET() }, 
+        };
+
+
+        
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -51,7 +60,7 @@ namespace BabaIsYou
             m_sysRenderer = new Systems.Renderer(_spriteBatch, WINDOW_WIDTH, WINDOW_HEIGHT, m_sysTileSet.tileSize);
             m_sysKeyboardInput = new Systems.Input();
             m_sysMovement = new Systems.Movement(m_sysTileSet);
-            m_sysRule = new Systems.Rule(m_sysTileSet);
+            m_sysRule = new Systems.Rule(this, m_sysTileSet);
             m_sysAnimatedSprite = new Systems.AnimatedSprite();
 
             Texture2D _sprite = new Texture2D(GraphicsDevice, 1, 1);
@@ -59,73 +68,18 @@ namespace BabaIsYou
 
 
 
+            AddEntity(new WordPushET().CreateEntity(this, 7, 4));
+            AddEntity(new WordWallET().CreateEntity(this, 5, 4));
+            AddEntity(new WordIsET().CreateEntity(this, 6, 4));
 
-            Entity block = new Entity();
-            block.Add(new Position(1, 1));
-            block.Add(new Sprite(Content.Load<Texture2D>("Things/rock"), Color.Tan, 3));
-            block.Add(new Property(PropertyType.Pushable));
-            block.Add(new Noun(NounType.Rock));
-            AddEntity(block);
-
-            Entity block1 = new Entity();
-            block1.Add(new Position(2, 1));
-            block1.Add(new Sprite(Content.Load<Texture2D>("Words/word-rock"), Color.Tan, 3));
-            block1.Add(new Property(PropertyType.Pushable));
-            block1.Add(new Text(TextType.Noun, NounType.Rock));
-            block1.Add(new Noun(NounType.Text));
-            AddEntity(block1);
-
-            Entity block2 = new Entity();
-            block2.Add(new Position(3, 1));
-            block2.Add(new Sprite(Content.Load<Texture2D>("Words/word-is"), Color.White, 3));
-            block2.Add(new Property(PropertyType.Pushable));
-            block2.Add(new Text(TextType.Verb, VerbType.Is));
-            block2.Add(new Noun(NounType.Text));
-            AddEntity(block2);
-
-            Entity block3 = new Entity();
-            block3.Add(new Position(4, 1));
-            block3.Add(new Sprite(Content.Load<Texture2D>("Words/word-push"), Color.Gray, 3));
-            block3.Add(new Property(PropertyType.Pushable));
-            block3.Add(new Text(TextType.Adjective, PropertyType.Pushable));
-            block3.Add(new Noun(NounType.Text));
-            AddEntity(block3);
+            AddEntity(new WordIsET().CreateEntity(this, 3, 1));
+            AddEntity(new WordRockET().CreateEntity(this, 3, 2));
+            AddEntity(new WordStopET().CreateEntity(this, 3, 4));
 
 
-            Entity block4 = new Entity();
-            block4.Add(new Position(5, 4));
-            block4.Add(new Sprite(Content.Load<Texture2D>("Words/word-wall"), Color.Gray, 3));
-            block4.Add(new Property(PropertyType.Pushable));
-            block4.Add(new Text(TextType.Noun, NounType.Wall));
-            block4.Add(new Noun(NounType.Text));
-            AddEntity(block4);
-
-
-            Entity block5 = new Entity();
-            block5.Add(new Position(6, 4));
-            block5.Add(new Sprite(Content.Load<Texture2D>("Words/word-is"), Color.Gray, 3));
-            block5.Add(new Property(PropertyType.Pushable));
-            block5.Add(new Text(TextType.Verb, VerbType.Is));
-            block5.Add(new Noun(NounType.Text));
-            AddEntity(block5);
-
-
-            Entity block6 = new Entity();
-            block6.Add(new Position(7, 4));
-            block6.Add(new Sprite(Content.Load<Texture2D>("Words/word-stop"), Color.Gray, 3));
-            block6.Add(new Property(PropertyType.Pushable));
-            block6.Add(new Text(TextType.Adjective, PropertyType.Stop));
-            block6.Add(new Noun(NounType.Text));
-            AddEntity(block6);
-
-            Entity block7 = new Entity();
-            block7.Add(new Position(8, 5));
-            block7.Add(new Sprite(Content.Load<Texture2D>("Things/wall"), Color.Gray, 3));
-            block7.Add(new Property(PropertyType.Stop));
-            block7.Add(new Noun(NounType.Wall));
-            AddEntity(block7);
-
-            AddEntity(new BabaET().CreateEntity(this));
+            AddEntity(nounTypeLookup[NounType.Rock].CreateEntity(this, 3, 3));
+            AddEntity(nounTypeLookup[NounType.Wall].CreateEntity(this, 8, 5));
+            AddEntity(nounTypeLookup[NounType.BigBlue].CreateEntity(this, 0, 0));
 
             m_sysTileSet.FillTileSet();
         }
@@ -145,6 +99,9 @@ namespace BabaIsYou
             // TODO: Add your update logic here
 
             base.Update(gameTime);
+
+            m_addThese = m_sysRule.AddThese();
+            m_removeThese = m_sysRule.RemoveThese();
 
             foreach (var entity in m_removeThese)
             {

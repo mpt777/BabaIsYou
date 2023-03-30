@@ -11,16 +11,30 @@ namespace BabaIsYou.Systems
 {
     public class Rule : System
     {
-        private Tileset _tileSet; 
+        private Tileset _tileSet;
+        private List<Entity> _removeThese = new();
+        private List<Entity> _addThese = new();
+        private Game1 _game;
         
-        public Rule(Tileset tileSet)
+        public Rule(Game1 game, Tileset tileSet)
         {
             this._tileSet = tileSet;
+            this._game = game;
         }
         public override void Update(GameTime gameTime)
         {
+            this._addThese.Clear();
+            this._removeThese.Clear();
             ClearRules();
             UpdateRules();
+        }
+        public List<Entity> RemoveThese()
+        {
+            return this._removeThese;
+        }
+        public List<Entity> AddThese()
+        {
+            return this._addThese;
         }
 
         public void UpdateRules()
@@ -77,7 +91,7 @@ namespace BabaIsYou.Systems
                 }
                 if (sentence.words[0].nounType != null && sentence.words[2].nounType != null)
                 {
-                    UpdateRule((NounType)sentence.words[0].nounType, (PropertyType)sentence.words[2].nounType);
+                    UpdateRule((NounType)sentence.words[0].nounType, (NounType)sentence.words[2].nounType);
                     return;
                 }
             }
@@ -117,6 +131,15 @@ namespace BabaIsYou.Systems
         {
             foreach (Entity entity in m_entities.Values)
             {
+                if (!entity.HasComponent<Noun>()) { continue; }
+                var noun = entity.GetComponent<Noun>();
+                if (noun.nounType != nounType1) { continue; }
+                var position = entity.GetComponent<Position>();
+
+
+                Entity newEntity = this._game.nounTypeLookup[nounType2].CreateEntity(this._game, position.x, position.y);
+                _addThese.Add(newEntity);
+                _removeThese.Add(entity);
 
             }
         }

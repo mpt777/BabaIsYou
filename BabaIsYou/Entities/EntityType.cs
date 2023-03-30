@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BabaIsYou.Components;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,8 +11,9 @@ namespace BabaIsYou.Entities
     {
         public List<Entity> entities;
         public string fileLetter;
+        public NounType nounType;
         public EntityType() { }
-        virtual public Entity CreateEntity(Game1 game)
+        virtual public Entity CreateEntity(Game1 game, int x, int y)
         {
             throw new NotImplementedException();
         }
