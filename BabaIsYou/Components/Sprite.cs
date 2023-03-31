@@ -18,40 +18,30 @@ namespace BabaIsYou.Components
         private int _frameIndex;
         private float _accumulator;
         private TimeSpan _frameTime;
+        private float _layerDepth = 1f;
 
         private Rectangle _subframe = new Rectangle(0, 0, 0, 0);
 
         public Sprite(Texture2D sprite, Color fill)
         {
-            this.Initialize(sprite, fill, 1, new TimeSpan(0, 0, 0, 0, 200));
+            this.Initialize(sprite, fill, 1, 0.5f);
         }
         public Sprite(Texture2D sprite, Color fill, int frameCount)
         {
-            this.Initialize(sprite, fill, frameCount, new TimeSpan(0, 0, 0, 0, 200));
+            this.Initialize(sprite, fill, frameCount, 0.5f);
         }
-        public Sprite(Texture2D sprite, Color fill, int frameCount, TimeSpan frameTime)
+        public Sprite(Texture2D sprite, Color fill, int frameCount, float layerDepth)
         {
-            this.Initialize(sprite, fill, frameCount, frameTime);
+            this.Initialize(sprite, fill, frameCount, layerDepth);
         }
 
-        public void Initialize(Texture2D sprite, Color fill, int frameCount, TimeSpan frameTime)
+        public void Initialize(Texture2D sprite, Color fill, int frameCount, float layerDepth)
         {
             this.sprite = sprite;
             this.fill = fill;
             this.frameCount = frameCount;
-            this._frameTime = frameTime;
+            this._layerDepth = layerDepth;
             this.SetSubFrame();
-        }
-
-        public void Update(GameTime gameTime) 
-        {
-            if (this.frameCount == 1) { return; }
-            this._accumulator += (float)gameTime.ElapsedGameTime.TotalSeconds;
-            if (this._accumulator >= this._frameTime.TotalSeconds)
-            {
-                this._accumulator -= (float)this._frameTime.TotalSeconds;
-                this.UpdateFrame();
-            }
         }
 
         private void SetSubFrame()
@@ -70,6 +60,10 @@ namespace BabaIsYou.Components
         public Rectangle Bounds()
         {
             return this._subframe;
+        }
+        public float LayerDepth()
+        {
+            return this._layerDepth;
         }
     }
 }

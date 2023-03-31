@@ -1,5 +1,7 @@
 ﻿using BabaIsYou.Components;
 using BabaIsYou.Entities;
+using BabaIsYou.Entities.Things;
+using BabaIsYou.Entities.Words;
 using BabaIsYou.Views;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -30,14 +32,8 @@ namespace BabaIsYou
 
         private Systems.Tileset m_sysTileSet;
 
-        public Dictionary<NounType, EntityType> nounTypeLookup = new Dictionary<NounType, EntityType> { 
-            { NounType.BigBlue, new BabaET() },
-            { NounType.Wall, new WallET() },
-            { NounType.Rock, new RockET() }, 
-        };
-
-
-        
+        public Dictionary<NounType, EntityType> nounTypeLookup;        
+        public Dictionary<String, EntityType> textLookup;        
 
         public Game1()
         {
@@ -50,14 +46,30 @@ namespace BabaIsYou
         {
             // TODO: Add your initialization logic here
 
+            this.nounTypeLookup = new Dictionary<NounType, EntityType> {
+                { NounType.BigBlue, new BabaET(this) },
+                { NounType.Wall, new WallET(this) },
+                { NounType.Rock, new RockET(this) },
+                { NounType.Floor, new FloorET(this) },
+                { NounType.Flag, new FlagET(this) },
+                { NounType.Hedge, new HedgeET(this) },
+                { NounType.Water, new WaterET(this) },
+                { NounType.Grass, new GrassET(this) },
+                { NounType.Lava, new LavaET(this) },
+            };
+
+
             base.Initialize();
+
+            Systems.LevelReader levelReader = new Systems.LevelReader("Levels/level-1.bbiy");
+
             m_sysTileSet = new Systems.Tileset(15, 10, WINDOW_WIDTH, WINDOW_HEIGHT);
 
             _graphics.PreferredBackBufferWidth = WINDOW_WIDTH;
             _graphics.PreferredBackBufferHeight = WINDOW_HEIGHT;
             _graphics.ApplyChanges();
 
-            m_sysRenderer = new Systems.Renderer(_spriteBatch, WINDOW_WIDTH, WINDOW_HEIGHT, m_sysTileSet.tileSize);
+            m_sysRenderer = new Systems.Renderer(_spriteBatch, WINDOW_WIDTH, WINDOW_HEIGHT, m_sysTileSet);
             m_sysKeyboardInput = new Systems.Input();
             m_sysMovement = new Systems.Movement(m_sysTileSet);
             m_sysRule = new Systems.Rule(this, m_sysTileSet);
@@ -68,18 +80,20 @@ namespace BabaIsYou
 
 
 
-            AddEntity(new WordPushET().CreateEntity(this, 7, 4));
-            AddEntity(new WordWallET().CreateEntity(this, 5, 4));
-            AddEntity(new WordIsET().CreateEntity(this, 6, 4));
+            AddEntity(new WordPushET(this).CreateEntity(7, 4));
+            AddEntity(new WordWallET(this).CreateEntity(5, 4));
+            AddEntity(new WordIsET(this).CreateEntity(6, 4));
 
-            AddEntity(new WordIsET().CreateEntity(this, 3, 1));
-            AddEntity(new WordRockET().CreateEntity(this, 3, 2));
-            AddEntity(new WordStopET().CreateEntity(this, 3, 4));
+            AddEntity(new WordIsET(this).CreateEntity(3, 1));
+            AddEntity(new WordRockET(this).CreateEntity(3, 2));
+            AddEntity(new WordStopET(this).CreateEntity(3, 4));
 
 
-            AddEntity(nounTypeLookup[NounType.Rock].CreateEntity(this, 3, 3));
-            AddEntity(nounTypeLookup[NounType.Wall].CreateEntity(this, 8, 5));
-            AddEntity(nounTypeLookup[NounType.BigBlue].CreateEntity(this, 0, 0));
+            AddEntity(nounTypeLookup[NounType.Rock].CreateEntity(3, 3));
+            AddEntity(nounTypeLookup[NounType.Wall].CreateEntity(8, 5));
+            AddEntity(nounTypeLookup[NounType.BigBlue].CreateEntity(0, 0));
+            AddEntity(nounTypeLookup[NounType.Floor].CreateEntity(7, 7));
+            AddEntity(nounTypeLookup[NounType.Flag].CreateEntity(8, 8));
 
             m_sysTileSet.FillTileSet();
         }

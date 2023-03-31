@@ -14,6 +14,10 @@ namespace BabaIsYou.Components
         Text,
         Lava,
         Water,
+        Flag,
+        Floor,
+        Grass,
+        Hedge,
     }
     public class Noun : Component
     {

@@ -10,17 +10,19 @@ using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BabaIsYou.Entities
+namespace BabaIsYou.Entities.Things
 {
     public class RockET : EntityType
     {
         public new string fileLetter = "r";
         public new NounType nounType = NounType.Rock;
-        override public Entity CreateEntity(Game1 game, int x, int y)
+
+        public RockET(Game1 game) : base(game) { }
+        override public Entity CreateEntity(int x, int y)
         {
             Entity e = new Entity();
             e.Add(new Position(x, y));
-            e.Add(new Sprite(game.Content.Load<Texture2D>("Things/rock"), Color.Tan, 3));
+            e.Add(new Sprite(_game.Content.Load<Texture2D>("Things/rock"), Color.Tan, 3));
             e.Add(new Property(PropertyType.Stop));
             e.Add(new Noun(NounType.Rock));
 

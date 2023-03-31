@@ -10,23 +10,24 @@ using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BabaIsYou.Entities
+namespace BabaIsYou.Entities.Words
 {
-    public class WordStopET : EntityType
+    public class WordWinET : EntityType
     {
-        public new string fileLetter = "S";
+        public new string fileLetter = "X";
         public new NounType nounType = NounType.Text;
-        override public Entity CreateEntity(Game1 game, int x, int y)
+
+        public WordWinET(Game1 game) : base(game) { }
+        override public Entity CreateEntity(int x, int y)
         {
             Entity e = new Entity();
             e.Add(new Position(x, y));
-            e.Add(new Sprite(game.Content.Load<Texture2D>("Words/word-stop"), Color.Gray, 3));
+            e.Add(new Sprite(_game.Content.Load<Texture2D>("Words/word-win"), Color.White, 3, 0.2f));
             e.Add(new Property(PropertyType.Pushable));
-            e.Add(new Text(TextType.Adjective, PropertyType.Stop));
+            e.Add(new Text(TextType.Noun, PropertyType.Win));
             e.Add(new Noun(NounType.Text));
 
             return e;
-
         }
     }
 }

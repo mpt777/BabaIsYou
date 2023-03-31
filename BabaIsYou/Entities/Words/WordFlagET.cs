@@ -10,22 +10,24 @@ using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BabaIsYou.Entities
+namespace BabaIsYou.Entities.Words
 {
-    public class WallET : EntityType
+    public class WordFlagET : EntityType
     {
-        public new string fileLetter = "w";
-        public new NounType nounType = NounType.Wall;
-        override public Entity CreateEntity(Game1 game, int x, int y)
+        public new string fileLetter = "F";
+        public new NounType nounType = NounType.Text;
+
+        public WordFlagET(Game1 game) : base(game) { }
+        override public Entity CreateEntity(int x, int y)
         {
             Entity e = new Entity();
             e.Add(new Position(x, y));
-            e.Add(new Sprite(game.Content.Load<Texture2D>("Things/wall"), Color.Gray, 3));
+            e.Add(new Sprite(_game.Content.Load<Texture2D>("Words/word-flag"), Color.White, 3));
             e.Add(new Property(PropertyType.Pushable));
-            e.Add(new Noun(NounType.Wall));
+            e.Add(new Text(TextType.Noun, NounType.Flag));
+            e.Add(new Noun(NounType.Text));
 
             return e;
-
         }
     }
 }

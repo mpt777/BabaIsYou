@@ -69,18 +69,25 @@ namespace BabaIsYou.Systems
                     }
                     Text text = entity.GetComponent<Text>();
                     sentence.AddWord(text);
-
-                    ProcessSentence(sentence);
+                    if (sentence.words.Count == 3)
+                    {
+                        ProcessSentence(sentence);
+                        return;
+                    }
                     AddToSentence(x + xIncrement, y + yIncrement, xIncrement, yIncrement, sentence);
                     
                 }
             }
-
+            else
+            {
+                ProcessSentence(sentence);
+            }
+            
         }
 
         private void ProcessSentence(Sentence sentence)
         {
-            if (sentence.words.Count >= 3)
+            if (sentence.words.Count == 3)
             {
                 if (sentence.words[1].verbType == null) { return; }
 
@@ -137,7 +144,7 @@ namespace BabaIsYou.Systems
                 var position = entity.GetComponent<Position>();
 
 
-                Entity newEntity = this._game.nounTypeLookup[nounType2].CreateEntity(this._game, position.x, position.y);
+                Entity newEntity = this._game.nounTypeLookup[nounType2].CreateEntity(position.x, position.y);
                 _addThese.Add(newEntity);
                 _removeThese.Add(entity);
 

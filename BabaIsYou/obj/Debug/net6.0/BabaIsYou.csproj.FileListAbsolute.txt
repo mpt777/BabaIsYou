@@ -46,3 +46,7 @@ C:\Users\mptay\source\repos\BabaIsYou\BabaIsYou\bin\Debug\net6.0\Content\Things\
 C:\Users\mptay\source\repos\BabaIsYou\BabaIsYou\bin\Debug\net6.0\Content\Things\rock.xnb
 C:\Users\mptay\source\repos\BabaIsYou\BabaIsYou\bin\Debug\net6.0\Content\Things\wall.xnb
 C:\Users\mptay\source\repos\BabaIsYou\BabaIsYou\bin\Debug\net6.0\Content\Things\water.xnb
+C:\Users\mptay\source\repos\BabaIsYou\BabaIsYou\bin\Debug\net6.0\Content\Things\floor.xnb
+C:\Users\mptay\source\repos\BabaIsYou\BabaIsYou\bin\Debug\net6.0\Content\Things\flowers.xnb
+C:\Users\mptay\source\repos\BabaIsYou\BabaIsYou\bin\Debug\net6.0\Content\Things\grass.xnb
+C:\Users\mptay\source\repos\BabaIsYou\BabaIsYou\bin\Debug\net6.0\Content\Things\hedge.xnb

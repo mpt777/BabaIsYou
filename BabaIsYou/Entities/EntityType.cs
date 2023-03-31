@@ -12,8 +12,12 @@ namespace BabaIsYou.Entities
         public List<Entity> entities;
         public string fileLetter;
         public NounType nounType;
-        public EntityType() { }
-        virtual public Entity CreateEntity(Game1 game, int x, int y)
+        protected Game1 _game;
+        public EntityType(Game1 game) 
+        {
+            this._game = game;
+        }
+        virtual public Entity CreateEntity(int x, int y)
         {
             throw new NotImplementedException();
         }

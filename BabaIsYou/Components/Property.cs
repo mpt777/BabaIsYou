@@ -15,6 +15,7 @@ namespace BabaIsYou.Components
         Win,
         Kill,
         Stop,
+        Sink,
     }
     public class Property : Component
     {
