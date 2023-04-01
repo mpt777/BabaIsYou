@@ -19,11 +19,11 @@ namespace BabaIsYou.Systems
         private readonly SpriteBatch m_spriteBatch;
         private readonly Texture2D m_texBackground;
 
-        public Renderer(SpriteBatch spriteBatch, int width, int height, Tileset tileset) : base(typeof(Components.Position), typeof(Components.Sprite))
+        public Renderer(SpriteBatch spriteBatch, int width, int height, Level level) : base(typeof(Components.Position), typeof(Components.Sprite))
         {
-            GRID_SIZE = tileset.tileSize;
-            OFFSET_X = (width - (GRID_SIZE * tileset.tilesW)) / 2;
-            OFFSET_Y = (height - (GRID_SIZE * tileset.tilesH)) / 2;
+            GRID_SIZE = Math.Min(width / level.Width(), height / level.Height());
+            OFFSET_X = (width - (GRID_SIZE * level.Width())) / 2;
+            OFFSET_Y = (height - (GRID_SIZE * level.Height())) / 2;
             m_spriteBatch = spriteBatch;
         }
 

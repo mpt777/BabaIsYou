@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework;
 
 namespace BabaIsYou.Systems
 {
-    public class Tileset : System
+    public class TileSet : System
     {
         private int width;
         private int height;
@@ -19,7 +19,7 @@ namespace BabaIsYou.Systems
 
         public List<Entity>[,] tiles;
 
-        public Tileset(int tilesW, int tilesH, int width, int height)
+        public TileSet(Level level, int width, int height)
         {
             this.width = width;
             this.height = height;

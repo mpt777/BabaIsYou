@@ -21,7 +21,7 @@ namespace BabaIsYou.Entities.Things
         override public Entity CreateEntity(int x, int y)
         {
             Entity e = new Entity();
-            e.Add(new Position(0, 0));
+            e.Add(new Position(x, y));
             e.Add(new Sprite(_game.Content.Load<Texture2D>("Things/Baba"), Color.White, 1, 0f));
             e.Add(new Input(new Dictionary<Keys, Direction> { { Keys.Up, Direction.Up }, { Keys.Right, Direction.Right }, { Keys.Down, Direction.Down }, { Keys.Left, Direction.Left } }));
             e.Add(new Property(PropertyType.You));

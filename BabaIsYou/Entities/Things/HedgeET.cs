@@ -22,9 +22,9 @@ namespace BabaIsYou.Entities.Things
         {
             Entity e = new Entity();
             e.Add(new Position(x, y));
-            e.Add(new Sprite(_game.Content.Load<Texture2D>("Things/hedge"), Color.Orange, 3, 0.8f));
+            e.Add(new Sprite(_game.Content.Load<Texture2D>("Things/hedge"), Color.Green, 3, 0.8f));
             e.Add(new Noun(NounType.Hedge));
-            e.Add(new Property(PropertyType.Stop));
+            e.Add(new Property(PropertyType.Stop, true));
 
             return e;
         }

@@ -1,6 +1,8 @@
 ﻿using BabaIsYou.Components;
 using BabaIsYou.Entities;
+using Breakout;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,19 +13,17 @@ namespace BabaIsYou.Systems
 {
     public class Movement : System
     {
-        private int _width;
-        private int _height;
-        private Tileset _tileSet;
+        private Level _level;
         private bool _hasUpdated = false;
+        CustomKeyboard keyboard = new CustomKeyboard();
 
-        public Movement(Tileset tileSet) 
+        public Movement(Level level) 
         {
-            this._tileSet = tileSet;
-            this._width = _tileSet.tilesW;
-            this._height = _tileSet.tilesH;
+            this._level = level;
         }
         public override void Update(GameTime gameTime)
         {
+            keyboard.GetKeyboardState();
             this._hasUpdated = false;
             foreach (var entity in m_entities.Values)
             {
@@ -38,28 +38,22 @@ namespace BabaIsYou.Systems
         private void MoveEntity(Entity entity, GameTime gameTime)
         {
             var movable = entity.GetComponent<Components.Position>();
-            if (entity.HasComponent<Components.Property>())
+
+            //movable.elapsedInterval -= movable.moveInterval;
+            switch (movable.direction)
             {
-                var property = entity.GetComponent<Components.Property>();
-                if (property.propertyType == PropertyType.You)
-                {
-                    //movable.elapsedInterval -= movable.moveInterval;
-                    switch (movable.direction)
-                    {
-                        case Components.Direction.Up:
-                            Move(entity, 0, -1);
-                            break;
-                        case Components.Direction.Down:
-                            Move(entity, 0, 1);
-                            break;
-                        case Components.Direction.Left:
-                            Move(entity, -1, 0);
-                            break;
-                        case Components.Direction.Right:
-                            Move(entity, 1, 0);
-                            break;
-                    }
-                }
+                case Components.Direction.Up:
+                    Move(entity, 0, -1);
+                    break;
+                case Components.Direction.Down:
+                    Move(entity, 0, 1);
+                    break;
+                case Components.Direction.Left:
+                    Move(entity, -1, 0);
+                    break;
+                case Components.Direction.Right:
+                    Move(entity, 1, 0);
+                    break;
             }
         }
 
@@ -85,7 +79,7 @@ namespace BabaIsYou.Systems
 
             Increment(position, xIncrement, yIncrement);
 
-            if (position.x < 0 || position.y < 0 || position.x >= _width || position.y >= _height)
+            if (position.x < 0 || position.y < 0 || position.x >= _level.Width() || position.y >= _level.Height())
             {
                 Increment(position, -xIncrement, -yIncrement);
                 return false;

@@ -23,7 +23,7 @@ namespace BabaIsYou.Entities.Words
             Entity e = new Entity();
             e.Add(new Position(x, y));
             e.Add(new Sprite(_game.Content.Load<Texture2D>("Words/word-wall"), Color.Gray, 3, 0.2f));
-            e.Add(new Property(PropertyType.Pushable));
+            e.Add(new Property(PropertyType.Pushable, true));
             e.Add(new Text(TextType.Noun, NounType.Wall));
             e.Add(new Noun(NounType.Text));
 

@@ -20,9 +20,19 @@ namespace BabaIsYou.Components
     public class Property : Component
     {
         public PropertyType? propertyType;
+        public bool isDefault = false; 
         public Property(PropertyType propertyType)
         {
+            this.Init(propertyType, false);
+        }
+        public Property(PropertyType propertyType, bool isDefault)
+        {
+            this.Init(propertyType, isDefault);
+        }
+        private void Init(PropertyType propertyType, bool isDefault)
+        {
             this.propertyType = propertyType;
+            this.isDefault = isDefault;
         }
 
         public void Clear()

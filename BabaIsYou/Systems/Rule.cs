@@ -11,14 +11,14 @@ namespace BabaIsYou.Systems
 {
     public class Rule : System
     {
-        private Tileset _tileSet;
+        private Level _level;
         private List<Entity> _removeThese = new();
         private List<Entity> _addThese = new();
         private Game1 _game;
         
-        public Rule(Game1 game, Tileset tileSet)
+        public Rule(Game1 game, Level level)
         {
-            this._tileSet = tileSet;
+            this._level = level;
             this._game = game;
         }
         public override void Update(GameTime gameTime)
@@ -39,9 +39,9 @@ namespace BabaIsYou.Systems
 
         public void UpdateRules()
         {
-            for (int i = 0; i < _tileSet.tiles.GetLength(0); i++)
+            for (int i = 0; i < _level.tiles.GetLength(0); i++)
             {
-                for (int j = 0; j < _tileSet.tiles.GetLength(1); j++)
+                for (int j = 0; j < _level.tiles.GetLength(1); j++)
                 {
                     StartSentence(i, j);
                 }
@@ -49,7 +49,7 @@ namespace BabaIsYou.Systems
         }
         private void StartSentence(int x, int y)
         {
-            List<Entity> entities = _tileSet.tiles[x, y];
+            List<Entity> entities = _level.tiles[x, y];
             foreach (Entity entity in entities)
             {
                 AddToSentence(x, y, 1, 0, new Sentence());
@@ -58,8 +58,8 @@ namespace BabaIsYou.Systems
         }
         private void AddToSentence(int x, int y, int xIncrement, int yIncrement, Sentence sentence)
         {
-            List<Entity> entities = _tileSet.TileAt(x, y);
-            if (_tileSet.TileAt(x, y).Count > 0)
+            List<Entity> entities = _level.TileAt(x, y);
+            if (_level.TileAt(x, y).Count > 0)
             {
                 foreach (Entity entity in entities)
                 {
@@ -109,7 +109,8 @@ namespace BabaIsYou.Systems
             foreach (Entity entity in m_entities.Values)
             {
                 if (entity.HasComponent<Property>() && entity.HasComponent<Noun>()) {
-                    if (entity.GetComponent<Noun>().nounType != NounType.BigBlue && entity.GetComponent<Noun>().nounType != NounType.Text)
+                    var property = entity.GetComponent<Property>();
+                    if (!property.isDefault)
                     {
                         entity.GetComponent<Property>().Clear();
                     }

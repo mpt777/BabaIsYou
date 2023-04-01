@@ -30,7 +30,7 @@ namespace BabaIsYou
         private Systems.Rule m_sysRule;
         private Systems.AnimatedSprite m_sysAnimatedSprite;
 
-        private Systems.Tileset m_sysTileSet;
+        private Systems.Level m_sysLevel;
 
         public Dictionary<NounType, EntityType> nounTypeLookup;        
         public Dictionary<String, EntityType> textLookup;        
@@ -61,41 +61,24 @@ namespace BabaIsYou
 
             base.Initialize();
 
-            Systems.LevelReader levelReader = new Systems.LevelReader("Levels/level-1.bbiy");
-
-            m_sysTileSet = new Systems.Tileset(15, 10, WINDOW_WIDTH, WINDOW_HEIGHT);
+            
 
             _graphics.PreferredBackBufferWidth = WINDOW_WIDTH;
             _graphics.PreferredBackBufferHeight = WINDOW_HEIGHT;
             _graphics.ApplyChanges();
 
-            m_sysRenderer = new Systems.Renderer(_spriteBatch, WINDOW_WIDTH, WINDOW_HEIGHT, m_sysTileSet);
+            Systems.LevelReader levelReader = new Systems.LevelReader(this, "Levels/level-1.bbiy");
+
+            this.m_addThese = levelReader.Entities();
+
+            m_sysLevel = levelReader.Level();
+            m_sysRenderer = new Systems.Renderer(_spriteBatch, WINDOW_WIDTH, WINDOW_HEIGHT, m_sysLevel);
             m_sysKeyboardInput = new Systems.Input();
-            m_sysMovement = new Systems.Movement(m_sysTileSet);
-            m_sysRule = new Systems.Rule(this, m_sysTileSet);
+            m_sysMovement = new Systems.Movement(m_sysLevel);
+            m_sysRule = new Systems.Rule(this, m_sysLevel);
             m_sysAnimatedSprite = new Systems.AnimatedSprite();
 
-            Texture2D _sprite = new Texture2D(GraphicsDevice, 1, 1);
-            _sprite.SetData(new[] { Color.White });
-
-
-
-            AddEntity(new WordPushET(this).CreateEntity(7, 4));
-            AddEntity(new WordWallET(this).CreateEntity(5, 4));
-            AddEntity(new WordIsET(this).CreateEntity(6, 4));
-
-            AddEntity(new WordIsET(this).CreateEntity(3, 1));
-            AddEntity(new WordRockET(this).CreateEntity(3, 2));
-            AddEntity(new WordStopET(this).CreateEntity(3, 4));
-
-
-            AddEntity(nounTypeLookup[NounType.Rock].CreateEntity(3, 3));
-            AddEntity(nounTypeLookup[NounType.Wall].CreateEntity(8, 5));
-            AddEntity(nounTypeLookup[NounType.BigBlue].CreateEntity(0, 0));
-            AddEntity(nounTypeLookup[NounType.Floor].CreateEntity(7, 7));
-            AddEntity(nounTypeLookup[NounType.Flag].CreateEntity(8, 8));
-
-            m_sysTileSet.FillTileSet();
+            AddAndRemoveEntities();
         }
 
         protected override void LoadContent()
@@ -103,6 +86,21 @@ namespace BabaIsYou
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+        }
+
+        private void AddAndRemoveEntities()
+        {
+            foreach (var entity in m_removeThese)
+            {
+                RemoveEntity(entity);
+            }
+            m_removeThese.Clear();
+
+            foreach (var entity in m_addThese)
+            {
+                AddEntity(entity);
+            }
+            m_addThese.Clear();
         }
 
         protected override void Update(GameTime gameTime)
@@ -117,25 +115,16 @@ namespace BabaIsYou
             m_addThese = m_sysRule.AddThese();
             m_removeThese = m_sysRule.RemoveThese();
 
-            foreach (var entity in m_removeThese)
-            {
-                RemoveEntity(entity);
-            }
-            m_removeThese.Clear();
-
-            foreach (var entity in m_addThese)
-            {
-                AddEntity(entity);
-            }
-            m_addThese.Clear();
+            AddAndRemoveEntities();
 
             m_sysKeyboardInput.Update(gameTime);
             m_sysMovement.Update(gameTime);
-            m_sysTileSet.BuildTileSet();
-            m_sysTileSet.FillTileSet();
+
 
             if (m_sysMovement.HasUpdated())
             {
+                m_sysLevel.ClearTileSet();
+                m_sysLevel.FillTileSet();
                 m_sysRule.Update(gameTime);
             }
             
@@ -145,7 +134,7 @@ namespace BabaIsYou
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
             // TODO: Add your drawing code here
 
@@ -160,8 +149,8 @@ namespace BabaIsYou
             m_sysKeyboardInput.Add(entity);
             m_sysMovement.Add(entity);
             m_sysRule.Add(entity);
-            m_sysTileSet.Add(entity);
             m_sysAnimatedSprite.Add(entity);
+            m_sysLevel.Add(entity);
         }
 
         private void RemoveEntity(Entity entity)
@@ -170,8 +159,8 @@ namespace BabaIsYou
             m_sysKeyboardInput.Remove(entity.Id);
             m_sysMovement.Remove(entity.Id);
             m_sysRule.Remove(entity.Id);
-            m_sysTileSet.Remove(entity.Id);
             m_sysAnimatedSprite.Remove(entity.Id);
+            m_sysLevel.Remove(entity.Id);
         }
     }
 }

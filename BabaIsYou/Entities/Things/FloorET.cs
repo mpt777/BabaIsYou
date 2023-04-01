@@ -22,7 +22,7 @@ namespace BabaIsYou.Entities.Things
         {
             Entity e = new Entity();
             e.Add(new Position(x, y));
-            e.Add(new Sprite(_game.Content.Load<Texture2D>("Things/floor"), Color.Gray, 3, 1f));
+            e.Add(new Sprite(_game.Content.Load<Texture2D>("Things/floor"), Color.DimGray, 3, 1f));
             e.Add(new Noun(NounType.Floor));
 
             return e;

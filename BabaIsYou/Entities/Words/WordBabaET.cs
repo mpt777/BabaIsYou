@@ -22,8 +22,8 @@ namespace BabaIsYou.Entities.Words
         {
             Entity e = new Entity();
             e.Add(new Position(x, y));
-            e.Add(new Sprite(_game.Content.Load<Texture2D>("Words/word-baba"), Color.White, 3));
-            e.Add(new Property(PropertyType.Pushable));
+            e.Add(new Sprite(_game.Content.Load<Texture2D>("Words/word-baba"), Color.DeepPink, 3));
+            e.Add(new Property(PropertyType.Pushable, true));
             e.Add(new Text(TextType.Noun, NounType.BigBlue));
             e.Add(new Noun(NounType.Text));
 
