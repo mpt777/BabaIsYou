@@ -16,7 +16,7 @@ namespace BabaIsYou.Entities
     /// <para>This class implements <see cref="IEnumerable{T}"/> of type <see cref="Component"/> to allow
     /// for easy iteration over its components.</para>
     /// </summary>
-    public sealed class Entity
+    public sealed class Entity : ICloneable
     {
         /// <summary>
         /// This entity's components.
@@ -150,6 +150,21 @@ namespace BabaIsYou.Entities
         public override string ToString()
         {
             return string.Format("{0}: {1}", Id, string.Join(", ", from c in components.Values select c.GetType().Name));
+        }
+
+        public object Clone()
+        {
+            return this.MemberwiseClone();
+        }
+
+        public Entity DeepClone()
+        {
+            Entity clone = new Entity();
+            foreach (Component c in this.components.Values)
+            {
+                clone.Add(c.DeepClone());
+            }
+            return clone;
         }
     }
 }

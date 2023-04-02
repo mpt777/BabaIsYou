@@ -21,15 +21,15 @@ namespace BabaIsYou.Components
     {
         public PropertyType? propertyType;
         public bool isDefault = false; 
-        public Property(PropertyType propertyType)
+        public Property(PropertyType? propertyType)
         {
             this.Init(propertyType, false);
         }
-        public Property(PropertyType propertyType, bool isDefault)
+        public Property(PropertyType? propertyType, bool isDefault)
         {
             this.Init(propertyType, isDefault);
         }
-        private void Init(PropertyType propertyType, bool isDefault)
+        private void Init(PropertyType? propertyType, bool isDefault)
         {
             this.propertyType = propertyType;
             this.isDefault = isDefault;
@@ -38,6 +38,10 @@ namespace BabaIsYou.Components
         public void Clear()
         {
             this.propertyType = null;
+        }
+        public override Component DeepClone()
+        {
+            return (Component)new Property(this.propertyType, this.isDefault);
         }
 
     }

@@ -11,12 +11,13 @@ namespace BabaIsYou.Systems
 {
     public class Level : System
     {
-        //private int width;
-        //private int height;
-        //public int tileSize;
         private int _tilesW;
         private int _tilesH;
         private string _name;
+        private List<Entity> _removeThese = new();
+        private List<Entity> _addThese = new();
+        private Stack<List<Entity>> undos = new();
+        private List<Entity> _previousState = new();
 
         public List<Entity>[,] tiles;
 
@@ -71,6 +72,7 @@ namespace BabaIsYou.Systems
 
             return tiles[x, y];
         }
+
         public void FillTileSet()
         {
             foreach (Entity entity in m_entities.Values)
@@ -78,8 +80,61 @@ namespace BabaIsYou.Systems
                 var position = entity.GetComponent<Components.Position>();
                 AddEntity(entity, position.x, position.y);
             }
+            this.PushUndoLayer();
+            this.SetPreviousState();
+        }
+        public void AddUndoLayer(List<Entity> entities)
+        {
+            List<Entity> newEntities = new List<Entity>();
+            foreach (Entity entity in entities)
+            {
+                newEntities.Add(entity.DeepClone());
+
+            }
+            this.undos.Push(newEntities);
+        }
+        public void Start()
+        {
+            this.SetPreviousState();
+        }
+        private void PushUndoLayer()
+        {
+            this.undos.Push(new List<Entity>(this._previousState));
+        }
+        private void SetPreviousState()
+        {
+            _previousState.Clear();
+            foreach (Entity entity in m_entities.Values)
+            {
+                _previousState.Add(entity.DeepClone());
+            }
+        }
+        private void SetPreviousState(List<Entity> entities)
+        {
+            _previousState.Clear();
+            foreach (Entity entity in entities)
+            {
+                _previousState.Add(entity.DeepClone());
+            }
         }
 
+        public void Undo()
+        {
+            if (this.undos.Count <= 0) {
+                return;
+            }
+            _removeThese = m_entities.Values.ToList();
+            _addThese = this.undos.Pop();
+            this.SetPreviousState(_addThese);
+        }
+        public List<Entity> RemoveThese()
+        {
+            return this._removeThese;
+        }
+        public List<Entity> AddThese()
+        {
+            return this._addThese;
+        }
         public void AddEntity(Entity e, int x, int y)
         {
             tiles[x, y].Add(e);

@@ -6,7 +6,13 @@ using System.Threading.Tasks;
 
 namespace BabaIsYou.Components
 {
-    public class Component
+    public abstract class Component
     {
+        public object Clone()
+        {
+            return this.MemberwiseClone();
+        }
+
+        public abstract Component DeepClone();
     }
 }

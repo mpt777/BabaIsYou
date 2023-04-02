@@ -39,5 +39,22 @@ namespace BabaIsYou.Components
             this.textType = textType;
             this.nounType = nounType;
         }
+        public override Component DeepClone()
+        {
+            if (this.verbType != null)
+            {
+                return (Component)new Text(this.textType, (VerbType)this.verbType);
+            }
+            if (this.nounType != null)
+            {
+                return (Component)new Text(this.textType, (NounType)this.nounType);
+            }
+            if (this.propertyType != null)
+            {
+                return (Component)new Text(this.textType, (PropertyType)this.propertyType);
+            }
+            throw new NotImplementedException();
+            
+        }
     }
 }

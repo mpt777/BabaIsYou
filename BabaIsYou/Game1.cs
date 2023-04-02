@@ -79,6 +79,8 @@ namespace BabaIsYou
             m_sysAnimatedSprite = new Systems.AnimatedSprite();
 
             AddAndRemoveEntities();
+
+            m_sysLevel.Start();
         }
 
         protected override void LoadContent()
@@ -112,14 +114,33 @@ namespace BabaIsYou
 
             base.Update(gameTime);
 
-            m_addThese = m_sysRule.AddThese();
-            m_removeThese = m_sysRule.RemoveThese();
-
-            AddAndRemoveEntities();
-
             m_sysKeyboardInput.Update(gameTime);
-            m_sysMovement.Update(gameTime);
+            List<Systems.Action> actions = m_sysKeyboardInput.Actions();
+            foreach (var action in actions)
+            {
+                switch (action)
+                {
+                    case Systems.Action.Undo:
+                        m_sysLevel.Undo();
+                        m_removeThese = m_sysLevel.RemoveThese();
+                        m_addThese = m_sysLevel.AddThese();
+                        break;
+                }
+            }
+            if (actions.Count == 0)
+            {
+                m_addThese = m_sysRule.AddThese();
+                m_removeThese = m_sysRule.RemoveThese();
+            }
 
+            if (m_addThese.Count != 0 || m_removeThese.Count != 0)
+            {
+                AddAndRemoveEntities();
+                m_sysAnimatedSprite.ForceUpdateEntities(); // Move this to a better spot!
+            }
+            
+            
+            m_sysMovement.Update(gameTime);
 
             if (m_sysMovement.HasUpdated())
             {

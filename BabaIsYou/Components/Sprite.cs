@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,7 +16,7 @@ namespace BabaIsYou.Components
         public Color fill;
         public Color stroke;
         public int frameCount;
-        private int _frameIndex;
+        private int _frameIndex { get; set; }
         private float _accumulator;
         private TimeSpan _frameTime;
         private float _layerDepth = 1f;
@@ -50,10 +51,14 @@ namespace BabaIsYou.Components
             int frameHeight = this.sprite.Bounds.Height;
             this._subframe = new Rectangle(frameWidth * this._frameIndex, this.sprite.Bounds.Y, frameHeight, frameWidth);
         }
-
+        public void SetFrameIndex(int frameIndex)
+        {
+            this._frameIndex = frameIndex % this.frameCount;
+            this.SetSubFrame();
+        }
         public void UpdateFrame() 
         {
-            this._frameIndex = (this._frameIndex + 1) % this.frameCount;
+            //this._frameIndex = (this._frameIndex + 1) % this.frameCount;
             this.SetSubFrame();
         }
 
@@ -64,6 +69,12 @@ namespace BabaIsYou.Components
         public float LayerDepth()
         {
             return this._layerDepth;
+        }
+
+        public override Component DeepClone()
+        {
+            Sprite sprite = new Sprite(this.sprite, this.fill, this.frameCount, this._layerDepth);
+            return (Component)sprite;
         }
     }
 }

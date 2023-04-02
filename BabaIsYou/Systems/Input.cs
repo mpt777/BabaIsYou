@@ -11,23 +11,42 @@ using BabaIsYou.Entities;
 
 namespace BabaIsYou.Systems
 {
+    public enum Action
+    {
+        Undo
+    }
     class Input : System
     {
-
-        CustomKeyboard keyboard = new CustomKeyboard();
-        Dictionary<Keys, Direction> inputMap = new Dictionary<Keys, Direction>();
+        private List<Action> _actions = new();
+        private CustomKeyboard _keyboard = new CustomKeyboard();
+        private Dictionary<Keys, Direction> _inputMap = new Dictionary<Keys, Direction>();
+        private Dictionary<Keys, Action> _actionMap = new Dictionary<Keys, Action>();
         public Input() //Dictionary<Keys, Direction> inputMap
         {
-            inputMap = new Dictionary<Keys, Direction> { { Keys.Up, Direction.Up }, { Keys.Right, Direction.Right }, { Keys.Down, Direction.Down }, { Keys.Left, Direction.Left } };
+            _inputMap = new Dictionary<Keys, Direction> { { Keys.Up, Direction.Up }, { Keys.Right, Direction.Right }, { Keys.Down, Direction.Down }, { Keys.Left, Direction.Left } };
+            _actionMap = new Dictionary<Keys, Action>() { { Keys.Z, Action.Undo} };
         }
 
         public override void Update(GameTime gameTime)
         {
-            keyboard.GetKeyboardState();
+            _actions.Clear();
+            _keyboard.GetKeyboardState();
             foreach (var entity in m_entities.Values)
             {
                 UpdateEntity(entity);
             }
+
+            foreach (var key in Keyboard.GetState().GetPressedKeys())
+            {
+                if (_actionMap.ContainsKey(key) && _keyboard.JustPressed(key))
+                {
+                    _actions.Add(_actionMap[key]);
+                }
+            }
+        }
+        public List<Action> Actions()
+        {
+            return _actions;
         }
         public void UpdateEntity(Entity entity)
         {
@@ -41,9 +60,9 @@ namespace BabaIsYou.Systems
 
                     foreach (var key in Keyboard.GetState().GetPressedKeys())
                     {
-                        if (inputMap.ContainsKey(key) && keyboard.JustPressed(key))
+                        if (_inputMap.ContainsKey(key) && _keyboard.JustPressed(key))
                         {
-                            movable.direction = inputMap[key];
+                            movable.direction = _inputMap[key];
                             return;
                         }
                     }
@@ -54,5 +73,6 @@ namespace BabaIsYou.Systems
             movable.direction = Direction.Stopped;
 
         }
+
     }
 }

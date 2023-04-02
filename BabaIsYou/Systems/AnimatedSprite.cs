@@ -12,7 +12,9 @@ namespace BabaIsYou.Systems
     class AnimatedSprite : System
     {
         private float _accumulator;
-        private TimeSpan _frameTime = new TimeSpan(0, 0, 0, 0, 200);
+        private int _frameIndex;
+        //private TimeSpan _frameTime = new TimeSpan(0, 0, 0, 0, 200);
+        private TimeSpan _frameTime = new TimeSpan(0, 0, 0, 1);
 
         public AnimatedSprite()
             : base(typeof(Components.Sprite))
@@ -25,9 +27,9 @@ namespace BabaIsYou.Systems
             if (this._accumulator >= this._frameTime.TotalSeconds)
             {
                 this._accumulator -= (float)this._frameTime.TotalSeconds;
+                this._frameIndex += 1;
                 this.UpdateEntities();
             }
-
         }
 
         private void UpdateEntities()
@@ -35,8 +37,12 @@ namespace BabaIsYou.Systems
             foreach (var entity in m_entities.Values)
             {
                 var sprite = entity.GetComponent<Components.Sprite>();
-                sprite.UpdateFrame();
+                sprite.SetFrameIndex(_frameIndex);
             }
+        }
+        public void ForceUpdateEntities()
+        {
+            this.UpdateEntities();
         }
     }
 }

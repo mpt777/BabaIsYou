@@ -26,5 +26,10 @@ namespace BabaIsYou.Components
         {
             this.nounType = nounType;
         }
+
+        public override Component DeepClone()
+        {
+            return (Component)new Noun(this.nounType);
+        }
     }
 }

@@ -15,5 +15,9 @@ namespace BabaIsYou.Components
         {
             this.keys = keys;
         }
+        public override Component DeepClone()
+        {
+            return (Component)new Input(this.keys);
+        }
     }
 }

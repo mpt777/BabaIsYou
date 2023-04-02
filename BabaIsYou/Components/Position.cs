@@ -24,6 +24,10 @@ namespace BabaIsYou.Components
             this.x = x;
             this.y = y;
         }
+        public override Component DeepClone()
+        {
+            return (Component)new Position(this.x, this.y);
+        }
     }
 
 }
