@@ -13,7 +13,8 @@ namespace BabaIsYou.Systems
 {
     public enum Action
     {
-        Undo
+        Undo,
+        Reset
     }
     class Input : System
     {
@@ -24,7 +25,7 @@ namespace BabaIsYou.Systems
         public Input() //Dictionary<Keys, Direction> inputMap
         {
             _inputMap = new Dictionary<Keys, Direction> { { Keys.Up, Direction.Up }, { Keys.Right, Direction.Right }, { Keys.Down, Direction.Down }, { Keys.Left, Direction.Left } };
-            _actionMap = new Dictionary<Keys, Action>() { { Keys.Z, Action.Undo} };
+            _actionMap = new Dictionary<Keys, Action>() { { Keys.Z, Action.Undo}, { Keys.R, Action.Reset } };
         }
 
         public override void Update(GameTime gameTime)
@@ -55,7 +56,7 @@ namespace BabaIsYou.Systems
             if (entity.HasComponent<Property>())
             {
                 var property = entity.GetComponent<Property>();
-                if (property.propertyType == PropertyType.You)
+                if (property.HasPropertyType(PropertyType.You))
                 {
 
                     foreach (var key in Keyboard.GetState().GetPressedKeys())

@@ -43,12 +43,13 @@ namespace Breakout.UI
             _position = position;
             this._fontName = fontName;
             this._color = color;
-            this.SetString(str);
             this.LoadContent();
+            this.SetString(str);
+            
         }
         public void LoadContent()
         {
-            _font = this._game.Content.Load<SpriteFont>(this._fontName);
+            _font = this._game.Content.Load<SpriteFont>($"Fonts/{this._fontName}");
         }
         private Vector2 OffsetPosition()
         {

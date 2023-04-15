@@ -103,7 +103,7 @@ namespace BabaIsYou.Systems
                 }
 
                 var property = otherEntity.GetComponent<Components.Property>();
-                if (property.propertyType == PropertyType.Pushable)
+                if (property.HasPropertyType(PropertyType.Pushable))
                 {
                     if (!ProcessMovement(otherEntity, xIncrement, yIncrement))
                     {
@@ -112,7 +112,7 @@ namespace BabaIsYou.Systems
                     }
                 }
 
-                if (property.propertyType == PropertyType.Stop)
+                if (property.HasPropertyType(PropertyType.Stop))
                 {
                     Increment(position, -xIncrement, -yIncrement);
                     return false;

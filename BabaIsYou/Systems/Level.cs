@@ -18,6 +18,7 @@ namespace BabaIsYou.Systems
         private List<Entity> _addThese = new();
         private Stack<List<Entity>> undos = new();
         private List<Entity> _previousState = new();
+        private List<Entity> _initialState = new();
 
         public List<Entity>[,] tiles;
 
@@ -62,7 +63,6 @@ namespace BabaIsYou.Systems
             return _tilesH;
         }
 
-
         public List<Entity> TileAt(int x, int y)
         {
             if (x < 0 || x >= tiles.GetLength(0) || y < 0 || y >= tiles.GetLength(1))
@@ -81,9 +81,9 @@ namespace BabaIsYou.Systems
                 AddEntity(entity, position.x, position.y);
             }
             this.PushUndoLayer();
-            this.SetPreviousState();
+            this.SetPreviousState(this.m_entities.Values.ToList());
         }
-        public void AddUndoLayer(List<Entity> entities)
+        private List<Entity> CopyEntities(List<Entity> entities)
         {
             List<Entity> newEntities = new List<Entity>();
             foreach (Entity entity in entities)
@@ -91,23 +91,24 @@ namespace BabaIsYou.Systems
                 newEntities.Add(entity.DeepClone());
 
             }
-            this.undos.Push(newEntities);
+            return newEntities;
+        }
+        public void AddUndoLayer(List<Entity> entities)
+        {
+            this.undos.Push(this.CopyEntities(entities));
+        }
+        public void SetInitialState(List<Entity> entities)
+        {
+            _initialState = this.CopyEntities(entities);
         }
         public void Start()
         {
-            this.SetPreviousState();
+            this.SetPreviousState(m_entities.Values.ToList());
+            SetInitialState(this.m_entities.Values.ToList());
         }
         private void PushUndoLayer()
         {
             this.undos.Push(new List<Entity>(this._previousState));
-        }
-        private void SetPreviousState()
-        {
-            _previousState.Clear();
-            foreach (Entity entity in m_entities.Values)
-            {
-                _previousState.Add(entity.DeepClone());
-            }
         }
         private void SetPreviousState(List<Entity> entities)
         {
@@ -126,6 +127,14 @@ namespace BabaIsYou.Systems
             _removeThese = m_entities.Values.ToList();
             _addThese = this.undos.Pop();
             this.SetPreviousState(_addThese);
+        }
+        public void Reset()
+        {
+            this.undos.Clear();
+            _removeThese = m_entities.Values.ToList();
+            _addThese = this._initialState;
+            SetInitialState(this._initialState.ToList());
+
         }
         public List<Entity> RemoveThese()
         {

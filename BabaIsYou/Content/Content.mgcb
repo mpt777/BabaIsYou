@@ -61,6 +61,13 @@
 /processorParam:TextureFormat=Color
 /build:Background/hedge.png
 
+#begin Fonts/arial.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/arial.spritefont
+
 #begin Things/baba.png
 /importer:TextureImporter
 /processor:TextureProcessor

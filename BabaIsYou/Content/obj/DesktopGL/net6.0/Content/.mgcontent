@@ -8,6 +8,7 @@
     <File>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/Background/flowers.png</File>
     <File>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/Background/grass.png</File>
     <File>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/Background/hedge.png</File>
+    <File>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/Fonts/arial.spritefont</File>
     <File>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/Things/baba.png</File>
     <File>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/Things/flag.png</File>
     <File>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/Things/floor.png</File>
@@ -33,6 +34,7 @@
     <File>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/Words/word-you.png</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

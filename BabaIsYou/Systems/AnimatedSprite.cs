@@ -14,7 +14,7 @@ namespace BabaIsYou.Systems
         private float _accumulator;
         private int _frameIndex;
         //private TimeSpan _frameTime = new TimeSpan(0, 0, 0, 0, 200);
-        private TimeSpan _frameTime = new TimeSpan(0, 0, 0, 1);
+        private TimeSpan _frameTime = new TimeSpan(0, 0, 0, 0, 700);
 
         public AnimatedSprite()
             : base(typeof(Components.Sprite))

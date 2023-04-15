@@ -74,6 +74,7 @@ namespace BabaIsYou.Systems
 
                 }
             }
+            
         }
         private EntityType GetEntityType(String entityString)
         {

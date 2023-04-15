@@ -131,7 +131,7 @@ namespace BabaIsYou.Systems
                 if (noun.nounType != nounType) { continue; }
 
                 var property = entity.GetComponent<Property>();
-                property.propertyType = propertyType;
+                property.AddPropertyType(propertyType);
 
             }
         }
