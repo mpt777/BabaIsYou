@@ -5,16 +5,24 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace BabaIsYou.Systems
 {
+    public enum LevelState
+    {
+        None,
+        Win,
+        Defeat
+    }
     public class Movement : System
     {
         private Level _level;
         private bool _hasUpdated = false;
+        public LevelState levelState { get; private set; }
         CustomKeyboard keyboard = new CustomKeyboard();
 
         public Movement(Level level) 
@@ -72,9 +80,31 @@ namespace BabaIsYou.Systems
             position.x += xIncrement;
         }
 
+        private bool isValidMovement(Entity entity, Entity otherEntity)
+        {
+            var position = entity.GetComponent<Components.Position>();
+            if (otherEntity == entity)
+            {
+                return false;
+            }
+            if (!otherEntity.HasComponent<Components.Property>())
+            {
+                return false;
+            }
+            var otherPosition = otherEntity.GetComponent<Components.Position>();
+
+            if (otherPosition.x != position.x || otherPosition.y != position.y)
+            {
+                return false;
+            }
+            return true;
+        }
+
         private bool ProcessMovement(Entity entity, int xIncrement, int yIncrement)
         {
             var position = entity.GetComponent<Components.Position>();
+            var property = entity.GetComponent<Components.Property>();
+            var noun = entity.GetComponent<Components.Noun>();
             position.direction = Components.Direction.Stopped;
 
             Increment(position, xIncrement, yIncrement);
@@ -85,25 +115,16 @@ namespace BabaIsYou.Systems
                 return false;
             }
 
+            // not sink
             foreach (var otherEntity in m_entities.Values)
             {
-                if (otherEntity == entity)
-                {
-                    continue;
-                }
-                if (!otherEntity.HasComponent<Components.Property>())
-                {
-                    continue;
-                }
-                var otherPosition = otherEntity.GetComponent<Components.Position>();
-
-                if (otherPosition.x != position.x || otherPosition.y != position.y)
+                if (!isValidMovement(entity, otherEntity))
                 {
                     continue;
                 }
 
-                var property = otherEntity.GetComponent<Components.Property>();
-                if (property.HasPropertyType(PropertyType.Pushable))
+                var otherProperty = otherEntity.GetComponent<Components.Property>();
+                if (otherProperty.HasPropertyType(PropertyType.Pushable))
                 {
                     if (!ProcessMovement(otherEntity, xIncrement, yIncrement))
                     {
@@ -112,13 +133,49 @@ namespace BabaIsYou.Systems
                     }
                 }
 
-                if (property.HasPropertyType(PropertyType.Stop))
+                if (otherProperty.HasPropertyType(PropertyType.Stop))
                 {
                     Increment(position, -xIncrement, -yIncrement);
                     return false;
                 }
 
+                if (otherProperty.HasPropertyType(PropertyType.Win) && property.HasPropertyType(PropertyType.You))
+                {
+                    this.levelState = LevelState.Win;
+                    return true;
+                }
+
+                if (otherProperty.HasPropertyType(PropertyType.Kill) && property.HasPropertyType(PropertyType.You))
+                {
+                    Debug.Print("Defeat!");
+                    _removeThese.Add(entity);
+                    this.levelState = LevelState.Defeat;
+                    return true;
+                }
+
             }
+
+            // sink
+            foreach (var otherEntity in m_entities.Values)
+            {
+                if (!isValidMovement(entity, otherEntity))
+                {
+                    continue;
+                }
+
+                var otherProperty = otherEntity.GetComponent<Components.Property>();
+
+                if (otherProperty.HasPropertyType(PropertyType.Sink) && noun.nounType != NounType.Text)
+                {
+                    Debug.Print("Sink!");
+                    _removeThese.Add(entity);
+                    _removeThese.Add(otherEntity);
+                    return true;
+                }
+
+            }
+
+
             return true;
         }
     }

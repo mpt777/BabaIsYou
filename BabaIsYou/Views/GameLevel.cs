@@ -1,10 +1,12 @@
 ﻿using BabaIsYou.Entities;
+using BabaIsYou.Systems;
 using Breakout.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,7 +40,7 @@ namespace BabaIsYou.Views
         protected override void Initialize()
         {
 
-            Systems.LevelReader levelReader = new Systems.LevelReader(this.game, "Levels/level-1.bbiy");
+            Systems.LevelReader levelReader = new Systems.LevelReader(this.game, "Levels/level-4.bbiy");
 
             this.m_addThese = levelReader.Entities();
 
@@ -89,6 +91,10 @@ namespace BabaIsYou.Views
             m_sysLevel.Remove(entity.Id);
         }
 
+        public void CombineList(ref List<Entity> l1, List<Entity> l2)
+        {
+            l1 = l1.Concat(l2).ToList();
+        }
         public override void Update(GameTime gameTime)
         {
 
@@ -100,20 +106,25 @@ namespace BabaIsYou.Views
                 {
                     case Systems.Action.Undo:
                         m_sysLevel.Undo();
-                        m_removeThese = m_sysLevel.RemoveThese();
-                        m_addThese = m_sysLevel.AddThese();
                         break;
                     case Systems.Action.Reset:
                         m_sysLevel.Reset();
-                        m_removeThese = m_sysLevel.RemoveThese();
-                        m_addThese = m_sysLevel.AddThese();
                         break;
                 }
             }
-            if (actions.Count == 0)
+
+            switch (m_sysMovement.levelState)
             {
-                m_addThese = m_sysRule.AddThese();
-                m_removeThese = m_sysRule.RemoveThese();
+                case LevelState.Win:
+                    this.game.RemoveFrame();
+                    break;
+            }
+
+            foreach (Systems.System sys in new List<Systems.System>{ m_sysLevel, m_sysRule, m_sysMovement })
+            {
+                CombineList(ref m_removeThese, sys.RemoveThese());
+                CombineList(ref m_addThese, sys.AddThese());
+                sys.ClearEntities();
             }
 
             if (m_addThese.Count != 0 || m_removeThese.Count != 0)
@@ -121,7 +132,6 @@ namespace BabaIsYou.Views
                 AddAndRemoveEntities();
                 m_sysAnimatedSprite.ForceUpdateEntities(); // Move this to a better spot!
             }
-
 
             m_sysMovement.Update(gameTime);
 

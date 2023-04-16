@@ -12,8 +12,13 @@ namespace BabaIsYou.Systems
     /// The base class for all systems in this ECS environment.
     /// <para>Derived classes should override <see cref="ComponentTypes"/> to specify the types of <see cref="Component"/> an <see cref="Entity"/> must have in order for the derived class to work with it, and <see cref="UpdateEntity(GameTime, Entity)"/> and/or <see cref="DrawEntity(GameTime, Entity)"/> to implement system-specific behavior with matching entities.</para>
     /// </summary>
+    /// 
+
     public abstract class System
     {
+        protected List<Entity> _removeThese = new();
+        protected List<Entity> _addThese = new();
+
         // Contains the entities this system is interested in, keyed by their IDs.
         protected Dictionary<uint, Entity> m_entities = new Dictionary<uint, Entity>();
 
@@ -80,5 +85,20 @@ namespace BabaIsYou.Systems
         /// </summary>
         /// <param name="gameTime">The current game time.</param>
         public abstract void Update(GameTime gameTime);
+
+        public List<Entity> RemoveThese()
+        {
+            return this._removeThese;
+        }
+        public List<Entity> AddThese()
+        {
+            return this._addThese;
+        }
+
+        public void ClearEntities()
+        {
+            this._addThese.Clear();
+            this._removeThese.Clear();
+        }
     }
 }

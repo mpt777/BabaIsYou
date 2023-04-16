@@ -14,8 +14,6 @@ namespace BabaIsYou.Systems
         private int _tilesW;
         private int _tilesH;
         private string _name;
-        private List<Entity> _removeThese = new();
-        private List<Entity> _addThese = new();
         private Stack<List<Entity>> undos = new();
         private List<Entity> _previousState = new();
         private List<Entity> _initialState = new();
@@ -133,16 +131,9 @@ namespace BabaIsYou.Systems
             this.undos.Clear();
             _removeThese = m_entities.Values.ToList();
             _addThese = this._initialState;
+            this.SetPreviousState(_addThese);
             SetInitialState(this._initialState.ToList());
 
-        }
-        public List<Entity> RemoveThese()
-        {
-            return this._removeThese;
-        }
-        public List<Entity> AddThese()
-        {
-            return this._addThese;
         }
         public void AddEntity(Entity e, int x, int y)
         {

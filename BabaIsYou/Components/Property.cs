@@ -17,6 +17,7 @@ namespace BabaIsYou.Components
         Kill = 32,
         Stop = 64,
         Sink = 128,
+        Float = 256,
     }
     public class Property : Component
     {

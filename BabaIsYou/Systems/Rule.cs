@@ -12,8 +12,6 @@ namespace BabaIsYou.Systems
     public class Rule : System
     {
         private Level _level;
-        private List<Entity> _removeThese = new();
-        private List<Entity> _addThese = new();
         private Game1 _game;
         
         public Rule(Game1 game, Level level)
@@ -23,18 +21,8 @@ namespace BabaIsYou.Systems
         }
         public override void Update(GameTime gameTime)
         {
-            this._addThese.Clear();
-            this._removeThese.Clear();
             ClearRules();
             UpdateRules();
-        }
-        public List<Entity> RemoveThese()
-        {
-            return this._removeThese;
-        }
-        public List<Entity> AddThese()
-        {
-            return this._addThese;
         }
 
         public void UpdateRules()

@@ -69,14 +69,14 @@ namespace BabaIsYou.Views
             //    }
             //}
 
-            //if (this.game.keyboard.IsOver(this.viewCredit.bounds))
-            //{
-            //    if (this.game.keyboard.JustLeftMouseDown())
-            //    {
-            //        this.game.AddFrame(new CreditView(this.game));
-            //        this.active = false;
-            //    }
-            //}
+            if (this.game.keyboard.IsOver(this.viewCredit.bounds))
+            {
+                if (this.game.keyboard.JustLeftMouseDown())
+                {
+                    this.game.AddFrame(new CreditView(this.game));
+                    this.active = false;
+                }
+            }
             if (this.game.keyboard.IsOver(this.quit.bounds))
             {
                 if (this.game.keyboard.JustLeftMouseDown())

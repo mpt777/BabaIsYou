@@ -83,20 +83,6 @@ namespace BabaIsYou
 
             this.frames.Push(new MainMenu(this, WINDOW_WIDTH, WINDOW_HEIGHT));
 
-            //Systems.LevelReader levelReader = new Systems.LevelReader(this, "Levels/level-1.bbiy");
-
-            //this.m_addThese = levelReader.Entities();
-
-            //m_sysLevel = levelReader.Level();
-            //m_sysRenderer = new Systems.Renderer(_spriteBatch, WINDOW_WIDTH, WINDOW_HEIGHT, m_sysLevel);
-            //m_sysKeyboardInput = new Systems.Input();
-            //m_sysMovement = new Systems.Movement(m_sysLevel);
-            //m_sysRule = new Systems.Rule(this, m_sysLevel);
-            //m_sysAnimatedSprite = new Systems.AnimatedSprite();
-
-            //AddAndRemoveEntities();
-
-            //m_sysLevel.Start();
         }
         public SpriteBatch SpriteBatch()
         {
@@ -109,21 +95,6 @@ namespace BabaIsYou
 
             // TODO: use this.Content to load your game content here
         }
-
-        //private void AddAndRemoveEntities()
-        //{
-        //    foreach (var entity in m_removeThese)
-        //    {
-        //        RemoveEntity(entity);
-        //    }
-        //    m_removeThese.Clear();
-
-        //    foreach (var entity in m_addThese)
-        //    {
-        //        AddEntity(entity);
-        //    }
-        //    m_addThese.Clear();
-        //}
 
         public void StartGame()
         {
@@ -167,8 +138,8 @@ namespace BabaIsYou
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+            //if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            //    Exit();
 
             // TODO: Add your update logic here
             this.keyboard.GetKeyboardState();
