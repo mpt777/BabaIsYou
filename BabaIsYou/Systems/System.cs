@@ -100,5 +100,10 @@ namespace BabaIsYou.Systems
             this._addThese.Clear();
             this._removeThese.Clear();
         }
+
+        public void ClearCurrentEntities()
+        {
+            this.m_entities.Clear();
+        }
     }
 }

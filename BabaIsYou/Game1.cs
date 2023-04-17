@@ -26,14 +26,7 @@ namespace BabaIsYou
 
         public CustomKeyboard keyboard;
 
-        //private List<Entity> m_removeThese = new List<Entity>();
-        //private List<Entity> m_addThese = new List<Entity>();
-
-        //private Systems.Renderer m_sysRenderer;
-        //private Systems.Input m_sysKeyboardInput;
-        //private Systems.Movement m_sysMovement;
-        //private Systems.Rule m_sysRule;
-        //private Systems.AnimatedSprite m_sysAnimatedSprite;
+        public LevelReader levelReader;
 
         public Stack<GameView> frames = new Stack<GameView>();
         public Stack<GameView> framesToAdd = new Stack<GameView>();
@@ -75,7 +68,7 @@ namespace BabaIsYou
 
             base.Initialize();
 
-            
+            this.levelReader = new LevelReader(this, "levels/levels-all.bbiy");
 
             _graphics.PreferredBackBufferWidth = WINDOW_WIDTH;
             _graphics.PreferredBackBufferHeight = WINDOW_HEIGHT;
@@ -96,10 +89,6 @@ namespace BabaIsYou
             // TODO: use this.Content to load your game content here
         }
 
-        public void StartGame()
-        {
-            this.framesToAdd.Push(new GameLevel(this));
-        }
         public void AddFrame(GameView frame)
         {
             this.framesToAdd.Push(frame);
@@ -144,45 +133,7 @@ namespace BabaIsYou
             // TODO: Add your update logic here
             this.keyboard.GetKeyboardState();
             this.ProcessFrames(gameTime);
-            base.Update(gameTime);
-
-            //m_sysKeyboardInput.Update(gameTime);
-            //List<Systems.Action> actions = m_sysKeyboardInput.Actions();
-            //foreach (var action in actions)
-            //{
-            //    switch (action)
-            //    {
-            //        case Systems.Action.Undo:
-            //            m_sysLevel.Undo();
-            //            m_removeThese = m_sysLevel.RemoveThese();
-            //            m_addThese = m_sysLevel.AddThese();
-            //            break;
-            //    }
-            //}
-            //if (actions.Count == 0)
-            //{
-            //    m_addThese = m_sysRule.AddThese();
-            //    m_removeThese = m_sysRule.RemoveThese();
-            //}
-
-            //if (m_addThese.Count != 0 || m_removeThese.Count != 0)
-            //{
-            //    AddAndRemoveEntities();
-            //    m_sysAnimatedSprite.ForceUpdateEntities(); // Move this to a better spot!
-            //}
-            
-            
-            //m_sysMovement.Update(gameTime);
-
-            //if (m_sysMovement.HasUpdated())
-            //{
-            //    m_sysLevel.ClearTileSet();
-            //    m_sysLevel.FillTileSet();
-            //    m_sysRule.Update(gameTime);
-            //}
-            
-            //m_sysAnimatedSprite.Update(gameTime);
-            
+            base.Update(gameTime);            
         }
 
         protected override void Draw(GameTime gameTime)
@@ -209,24 +160,5 @@ namespace BabaIsYou
 
         }
 
-        //private void AddEntity(Entity entity)
-        //{
-        //    m_sysRenderer.Add(entity);
-        //    m_sysKeyboardInput.Add(entity);
-        //    m_sysMovement.Add(entity);
-        //    m_sysRule.Add(entity);
-        //    m_sysAnimatedSprite.Add(entity);
-        //    m_sysLevel.Add(entity);
-        //}
-
-        //private void RemoveEntity(Entity entity)
-        //{
-        //    m_sysRenderer.Remove(entity.Id);
-        //    m_sysKeyboardInput.Remove(entity.Id);
-        //    m_sysMovement.Remove(entity.Id);
-        //    m_sysRule.Remove(entity.Id);
-        //    m_sysAnimatedSprite.Remove(entity.Id);
-        //    m_sysLevel.Remove(entity.Id);
-        //}
     }
 }

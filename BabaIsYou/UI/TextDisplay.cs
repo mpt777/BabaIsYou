@@ -19,30 +19,36 @@ namespace Breakout.UI
         private string _fontName;
         private Vector2 _offset;
         private Color _color;
+        private Color _hoverColor;
         private SpriteFont _font;
         public Rectangle bounds;
         public TextDisplay(Game1 game, String str, Vector2 position)
         {
-            Init(game, str, position, "arial", Color.White);
+            Init(game, str, position, "arial", Color.White, Color.White);
         }
         public TextDisplay(Game1 game, String str, Vector2 position, Color color)
         {
-            Init(game, str, position, "arial", color);
+            Init(game, str, position, "arial", color, color);
         }
         public TextDisplay(Game1 game, String str, Vector2 position, String fontName)
         {
-            Init(game, str, position, fontName, Color.White);
+            Init(game, str, position, fontName, Color.White, Color.White);
         }
         public TextDisplay(Game1 game, String str, Vector2 position, String fontName, Color color)
         {
-            Init(game, str, position, fontName, color);
+            Init(game, str, position, fontName, color, color);
         }
-        private void Init(Game1 game, String str, Vector2 position, String fontName, Color color)
+        public TextDisplay(Game1 game, String str, Vector2 position, String fontName, Color color, Color hoverColor)
+        {
+            Init(game, str, position, fontName, color, hoverColor);
+        }
+        private void Init(Game1 game, String str, Vector2 position, String fontName, Color color, Color hoverColor)
         {
             this._game = game;
             _position = position;
             this._fontName = fontName;
             this._color = color;
+            this._hoverColor = hoverColor;
             this.LoadContent();
             this.SetString(str);
             
@@ -61,6 +67,10 @@ namespace Breakout.UI
             this._offset.X = -measure.X / 2;
             this._offset.Y = -measure.Y / 2;
             this.SetString(this._text);
+        }
+        public void SetHoverColor(Color color)
+        {
+            this._hoverColor = color;
         }
         public void SetString(string text)
         {
@@ -81,7 +91,15 @@ namespace Breakout.UI
         {
             if (_text != null)
             {
-                spriteBatch.DrawString(_font, _text, this.OffsetPosition(), _color);
+                if (this._game.keyboard.IsOver(this.bounds) && this._hoverColor != this._color)
+                {
+                    spriteBatch.DrawString(_font, _text, this.OffsetPosition(), this._hoverColor);
+                }
+                else
+                {
+                    spriteBatch.DrawString(_font, _text, this.OffsetPosition(), _color);
+                }
+                
             }
         }
     }

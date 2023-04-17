@@ -4,7 +4,10 @@ using System.Diagnostics;
 using System.Diagnostics.Metrics;
 using System.IO;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using BabaIsYou.Entities;
 using BabaIsYou.Entities.Things;
@@ -16,7 +19,6 @@ namespace BabaIsYou.Systems
     public class LevelReader : System
     {
         private String _fileName;
-        private Level _level;
         private Game1 _game;
         private Dictionary<String, EntityType> levelLookup;
         private int _tilesW;
@@ -25,7 +27,7 @@ namespace BabaIsYou.Systems
         {
             this._game = game;
             this._fileName = fileName;
-           
+
             this.levelLookup = new Dictionary<string, EntityType> {
                 { "w", new WallET(this._game) },
                 { "r", new RockET(this._game) },
@@ -51,40 +53,81 @@ namespace BabaIsYou.Systems
                 { "N", new WordSinkET(this._game) },
                 { "K", new WordKillET(this._game) },
             };
-            this.ReadFile();
-            Debug.Print("Here");
-        }
-        public Level Level()
-        {
-            return this._level;
         }
 
-        private void ReadFile()
+        public Level ReadLevel(String levelName)
         {
+            List<String> strings = new List<String>();
+
             var fileStream = new FileStream(_fileName, FileMode.Open, FileAccess.Read);
+            Level level = new Level();
+            int lineNumber = 0;
+            bool inLevel = false;
             using (var streamReader = new StreamReader(fileStream, Encoding.UTF8))
             {
-                int lineNumber = 0;
-                this._level = new Level();
-                string line;
-                while ((line = streamReader.ReadLine()) != null)
+                strings = File.ReadAllLines(_fileName).ToList();
+                for (int i = 0; i < strings.Count; i++)
                 {
-                    ProcessLine(line, lineNumber);
-                    lineNumber++;
+                    string currentLine = strings[i];
+                    string nextLine = i + 1 < strings.Count ? strings[i + 1] : null; 
+
+                    if (inLevel && nextLine != null)
+                    {
+                        if (Regex.Match(nextLine, @"\d+\s*x\s*\d+").Success)
+                        {
+                            return level;
+                        }
+                    }
+                    if (strings[i] == levelName)
+                    {
+                        inLevel = true;
+                    }
+                    if (inLevel)
+                    {
+                        ProcessLine(level, strings[i], lineNumber);
+                        lineNumber++;
+                    }
 
                 }
             }
-            
+            return level;
+        }
+
+        public List<String> ReadLevelSelect()
+        {
+            List<String> strings = new List<String>();
+
+            var fileStream = new FileStream(_fileName, FileMode.Open, FileAccess.Read);
+            List<String> levelNames = new List<String>();
+
+            using (var streamReader = new StreamReader(fileStream, Encoding.UTF8))
+            {
+                strings = File.ReadAllLines(_fileName).ToList();
+                for (int i = 0; i < strings.Count; i++)
+                {
+                    string currentLine = strings[i];
+                    string nextLine = i + 1 < strings.Count ? strings[i + 1] : null;
+
+                    if (nextLine != null)
+                    {
+                        if (Regex.Match(nextLine, @"\d+\s*x\s*\d+").Success)
+                        {
+                            levelNames.Add(currentLine);
+                        }
+                    }
+                }
+                return levelNames;
+            }
         }
         private EntityType GetEntityType(String entityString)
         {
             return this.levelLookup[entityString];
         }
-        private void ProcessLine(String line, int lineNumber)
+        private void ProcessLine(Level level, String line, int lineNumber)
         {
             if (lineNumber == 0)
             {
-                this._level.SetName(line);
+                level.SetName(line);
                 return;
             }
             if (lineNumber == 1)
@@ -93,7 +136,7 @@ namespace BabaIsYou.Systems
                 string[] words = line.Split(" x ");
                 this._tilesW = Int32.Parse(words[0]);
                 this._tilesH = Int32.Parse(words[1]);
-                this._level.InitializeTileSet(this._tilesW, this._tilesH);
+                level.InitializeTileSet(this._tilesW, this._tilesH);
                 return;
             }
             int column = 0;
@@ -104,15 +147,11 @@ namespace BabaIsYou.Systems
                     EntityType et = this.GetEntityType(c.ToString());
                     Entity entity = et.CreateEntity(column, (lineNumber - 2) % this._tilesH);
 
-                    Add(entity);
+                    level.Add(entity);
                 }
 
                 column++;
             }
-        }
-        public List<Entity> Entities()
-        {
-            return m_entities.Values.ToList();
         }
         public override void Update(GameTime gameTime)
         {

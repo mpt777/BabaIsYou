@@ -135,6 +135,10 @@ namespace BabaIsYou.Systems
             SetInitialState(this._initialState.ToList());
 
         }
+        public List<Entity> Entities()
+        {
+            return m_entities.Values.ToList();
+        }
         public void AddEntity(Entity e, int x, int y)
         {
             tiles[x, y].Add(e);

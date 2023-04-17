@@ -33,10 +33,10 @@ namespace BabaIsYou.Views
         protected override void Initialize()
         {
             this.title = new TextDisplay(this.game, "Baba Is You", new Vector2(this.dimensions.X / 2, 100));
-            this.startGame = new TextDisplay(this.game, "New Game", new Vector2(this.dimensions.X / 2, 250));
-            this.viewControls = new TextDisplay(this.game, "Controls", new Vector2(this.dimensions.X / 2, 300));
-            this.viewCredit = new TextDisplay(this.game, "Credits", new Vector2(this.dimensions.X / 2, 350));
-            this.quit = new TextDisplay(this.game, "Quit", new Vector2(this.dimensions.X / 2, 450));
+            this.startGame = new TextDisplay(this.game, "New Game", new Vector2(this.dimensions.X / 2, 250), "arial", Color.White, Color.Orange);
+            this.viewControls = new TextDisplay(this.game, "Controls", new Vector2(this.dimensions.X / 2, 300), "arial", Color.White, Color.Orange);
+            this.viewCredit = new TextDisplay(this.game, "Credits", new Vector2(this.dimensions.X / 2, 350), "arial", Color.White, Color.Orange);
+            this.quit = new TextDisplay(this.game, "Quit", new Vector2(this.dimensions.X / 2, 450), "arial", Color.White, Color.Orange);
 
             this.title.Center();
             this.startGame.Center();
@@ -55,19 +55,10 @@ namespace BabaIsYou.Views
             {
                 if (this.game.keyboard.JustLeftMouseDown())
                 {
-                    this.game.StartGame();
+                    this.game.AddFrame(new LevelSelectView(this.game, this.game.levelReader.ReadLevelSelect()));
                     this.active = false;
                 }
             }
-
-            //if (this.game.keyboard.IsOver(this.viewHighScore.bounds))
-            //{
-            //    if (this.game.keyboard.JustLeftMouseDown())
-            //    {
-            //        this.game.AddFrame(new HighScoreView(this.game));
-            //        this.active = false;
-            //    }
-            //}
 
             if (this.game.keyboard.IsOver(this.viewCredit.bounds))
             {

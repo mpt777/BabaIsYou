@@ -24,27 +24,24 @@ namespace BabaIsYou.Views
         private Systems.Rule m_sysRule;
         private Systems.AnimatedSprite m_sysAnimatedSprite;
         private Systems.Level m_sysLevel;
-        public GameLevel(Game1 game): base(game)
+        public GameLevel(Game1 game, String levelName): base(game)
         {
-            this.Initialize();
+            this.Init(levelName);
         }
-        public GameLevel(Game1 game, int width, int height) : base(game, width, height)
+        public GameLevel(Game1 game, String levelName, int width, int height) : base(game, width, height)
         {
-            this.Initialize();
+            this.Init(levelName);
         }
-        public GameLevel(Game1 game, int width, int height, int posX, int posY) : base(game, width, height, posX, posY)
+        public GameLevel(Game1 game, String levelName, int width, int height, int posX, int posY) : base(game, width, height, posX, posY)
         {
-            this.Initialize();
+            this.Init(levelName);
         }
 
-        protected override void Initialize()
+        private void Init(String levelName)
         {
-
-            Systems.LevelReader levelReader = new Systems.LevelReader(this.game, "Levels/level-4.bbiy");
-
-            this.m_addThese = levelReader.Entities();
-
-            m_sysLevel = levelReader.Level();
+            m_sysLevel = this.game.levelReader.ReadLevel(levelName);
+            this.m_addThese = this.m_sysLevel.Entities();
+            this.m_sysLevel.ClearCurrentEntities();
             m_sysRenderer = new Systems.Renderer((int)dimensions.X, (int)dimensions.Y, m_sysLevel);
             m_sysKeyboardInput = new Systems.Input();
             m_sysMovement = new Systems.Movement(m_sysLevel);
@@ -97,6 +94,10 @@ namespace BabaIsYou.Views
         }
         public override void Update(GameTime gameTime)
         {
+            if (this.game.keyboard.JustPressed(Keys.Escape))
+            {
+                this.game.RemoveFrame();
+            }
 
             m_sysKeyboardInput.Update(gameTime);
             List<Systems.Action> actions = m_sysKeyboardInput.Actions();
