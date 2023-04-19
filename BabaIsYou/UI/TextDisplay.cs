@@ -9,7 +9,7 @@ using BabaIsYou.Components;
 using BabaIsYou.Entities;
 using BabaIsYou;
 
-namespace Breakout.UI
+namespace BabaIsYou.UI
 {
     public class TextDisplay
     {
@@ -71,6 +71,10 @@ namespace Breakout.UI
         public void SetHoverColor(Color color)
         {
             this._hoverColor = color;
+        }
+        public void SetColor(Color color)
+        {
+            this._color = color;
         }
         public void SetString(string text)
         {

@@ -14,35 +14,54 @@ namespace BabaIsYou.Systems
     public enum Action
     {
         Undo,
-        Reset
+        Reset,
+        Up,
+        Right,
+        Down,
+        Left,
     }
     class Input : System
     {
         private List<Action> _actions = new();
         private CustomKeyboard _keyboard = new CustomKeyboard();
-        private Dictionary<Keys, Direction> _inputMap = new Dictionary<Keys, Direction>();
-        private Dictionary<Keys, Action> _actionMap = new Dictionary<Keys, Action>();
-        public Input() //Dictionary<Keys, Direction> inputMap
+        //private Dictionary<Action, Direction> _inputMap = new Dictionary<Action, Direction>();
+        private Dictionary<Action, Direction> _directionMap = new Dictionary<Action, Direction>();
+        private Dictionary<Action, Keys> _actionMap = new Dictionary<Action, Keys>();
+        public Input(Dictionary<Action, Keys> actionMap)
         {
-            _inputMap = new Dictionary<Keys, Direction> { { Keys.Up, Direction.Up }, { Keys.Right, Direction.Right }, { Keys.Down, Direction.Down }, { Keys.Left, Direction.Left } };
-            _actionMap = new Dictionary<Keys, Action>() { { Keys.Z, Action.Undo}, { Keys.R, Action.Reset } };
+            _directionMap = new Dictionary<Action, Direction> { { Action.Up, Direction.Up }, { Action.Right, Direction.Right }, { Action.Down, Direction.Down }, { Action.Left, Direction.Left } };
+            this._actionMap = actionMap;
         }
 
         public override void Update(GameTime gameTime)
         {
             _actions.Clear();
             _keyboard.GetKeyboardState();
-            foreach (var entity in m_entities.Values)
-            {
-                UpdateEntity(entity);
-            }
+
+            //foreach (var key in Keyboard.GetState().GetPressedKeys())
+            //{
+            //    if (_actionMap.ContainsValue(key) && _keyboard.JustPressed(key))
+            //    {
+            //        _actions.Add(_actionMap[key]);
+            //    }
+            //}
 
             foreach (var key in Keyboard.GetState().GetPressedKeys())
             {
-                if (_actionMap.ContainsKey(key) && _keyboard.JustPressed(key))
+                if (_actionMap.ContainsValue(key) && _keyboard.JustPressed(key))
                 {
-                    _actions.Add(_actionMap[key]);
+                    Action[] actions = _actionMap.Where(i => i.Value == key).ToDictionary(it => it.Key, it => it.Value).Keys.ToArray();
+                    foreach (Action action in actions)
+                    {
+                        _actions.Add(action);
+                    }
+                    
                 }
+            }
+
+            foreach (var entity in m_entities.Values)
+            {
+                UpdateEntity(entity);
             }
         }
         public List<Action> Actions()
@@ -53,21 +72,21 @@ namespace BabaIsYou.Systems
         {
             var movable = entity.GetComponent<Position>();
 
-            if (entity.HasComponent<Property>())
-            {
-                var property = entity.GetComponent<Property>();
-                if (property.HasPropertyType(PropertyType.You))
-                {
 
-                    foreach (var key in Keyboard.GetState().GetPressedKeys())
+            foreach (Action action in _actions)
+            {
+                if (_directionMap.ContainsKey(action))
+                {
+                    if (entity.HasComponent<Property>())
                     {
-                        if (_inputMap.ContainsKey(key) && _keyboard.JustPressed(key))
+                        var property = entity.GetComponent<Property>();
+                        if (property.HasPropertyType(PropertyType.You))
                         {
-                            movable.direction = _inputMap[key];
+
+                            movable.direction = _directionMap[action];
                             return;
                         }
                     }
-
                 }
             }
 

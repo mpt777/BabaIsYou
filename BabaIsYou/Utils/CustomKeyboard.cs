@@ -40,6 +40,10 @@ namespace Breakout
             _prevKeyboardState = _keyboardState;
             _keyboardState = Keyboard.GetState();
         }
+        public Keys[] GetPressedKeys()
+        {
+            return _keyboardState.GetPressedKeys();
+        }
         public bool IsOver(Rectangle r)
         {
             return r.Contains(new Vector2(_mouseState.X, _mouseState.Y));

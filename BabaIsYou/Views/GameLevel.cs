@@ -1,6 +1,6 @@
 ﻿using BabaIsYou.Entities;
 using BabaIsYou.Systems;
-using Breakout.UI;
+using BabaIsYou.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -43,7 +43,7 @@ namespace BabaIsYou.Views
             this.m_addThese = this.m_sysLevel.Entities();
             this.m_sysLevel.ClearCurrentEntities();
             m_sysRenderer = new Systems.Renderer((int)dimensions.X, (int)dimensions.Y, m_sysLevel);
-            m_sysKeyboardInput = new Systems.Input();
+            m_sysKeyboardInput = new Systems.Input(this.game.inputMap.actionMap);
             m_sysMovement = new Systems.Movement(m_sysLevel);
             m_sysRule = new Systems.Rule(this.game, m_sysLevel);
             m_sysAnimatedSprite = new Systems.AnimatedSprite();

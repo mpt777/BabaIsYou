@@ -1,4 +1,5 @@
 ﻿using BabaIsYou.Components;
+using BabaIsYou.Controls;
 using BabaIsYou.Entities;
 using BabaIsYou.Entities.Things;
 using BabaIsYou.Entities.Words;
@@ -39,7 +40,9 @@ namespace BabaIsYou
         //private Systems.Level m_sysLevel;
 
         public Dictionary<NounType, EntityType> nounTypeLookup;        
-        public Dictionary<String, EntityType> textLookup;        
+        public Dictionary<String, EntityType> textLookup;
+
+        public InputMap inputMap = new InputMap();
 
         public Game1()
         {

@@ -1,5 +1,5 @@
 ﻿using BabaIsYou.Views;
-using Breakout.UI;
+using BabaIsYou.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -51,26 +51,24 @@ namespace BabaIsYou.Views
                 this.game.Exit();
             }
 
-            if (this.game.keyboard.IsOver(this.startGame.bounds))
+            if (this.game.keyboard.JustLeftMouseDown())
             {
-                if (this.game.keyboard.JustLeftMouseDown())
+                if (this.game.keyboard.IsOver(this.startGame.bounds))
                 {
                     this.game.AddFrame(new LevelSelectView(this.game, this.game.levelReader.ReadLevelSelect()));
                     this.active = false;
                 }
-            }
-
-            if (this.game.keyboard.IsOver(this.viewCredit.bounds))
-            {
-                if (this.game.keyboard.JustLeftMouseDown())
+                if (this.game.keyboard.IsOver(this.viewControls.bounds))
+                {
+                    this.game.AddFrame(new ControlView(this.game));
+                    this.active = false;
+                }
+                if (this.game.keyboard.IsOver(this.viewCredit.bounds))
                 {
                     this.game.AddFrame(new CreditView(this.game));
                     this.active = false;
                 }
-            }
-            if (this.game.keyboard.IsOver(this.quit.bounds))
-            {
-                if (this.game.keyboard.JustLeftMouseDown())
+                if (this.game.keyboard.IsOver(this.quit.bounds))
                 {
                     this.game.Exit();
                 }
