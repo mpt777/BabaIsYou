@@ -9,6 +9,7 @@ using Breakout;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,6 +45,8 @@ namespace BabaIsYou
 
         public InputMap inputMap = new InputMap();
 
+        private Song _music;
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -68,7 +71,6 @@ namespace BabaIsYou
                 { NounType.Lava, new LavaET(this) },
             };
 
-
             base.Initialize();
 
             this.levelReader = new LevelReader(this, "levels/levels-all.bbiy");
@@ -79,6 +81,26 @@ namespace BabaIsYou
 
             this.frames.Push(new MainMenu(this, WINDOW_WIDTH, WINDOW_HEIGHT));
 
+            StartMusic();
+        }
+
+        private void StartMusic()
+        {
+            MediaPlayer.Play(this._music);
+            MediaPlayer.IsRepeating = true;
+            MediaPlayer.Volume = 0.9f;
+        }
+        private void DefaultMusic()
+        {
+
+            if (MediaPlayer.Queue.ActiveSong != this._music)
+            {
+                MediaPlayer.Stop();
+                MediaPlayer.Play(this._music);
+                
+            }
+            
+            
         }
         public SpriteBatch SpriteBatch()
         {
@@ -88,7 +110,7 @@ namespace BabaIsYou
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-
+            this._music = this.Content.Load<Song>("Sounds/8-Bit-Puzzler");
             // TODO: use this.Content to load your game content here
         }
 
@@ -104,6 +126,7 @@ namespace BabaIsYou
         {
             while (this._shouldPopFrame > 0)
             {
+                DefaultMusic();
                 this.frames.Pop();
                 this.frames.Peek().active = true;
                 this.frames.Peek().paused = false;

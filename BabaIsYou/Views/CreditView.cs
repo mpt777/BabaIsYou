@@ -20,6 +20,8 @@ namespace BabaIsYou.Views
         {
             this.textDisplays.Add(new TextDisplay(this.game, "-- Credits --", new Vector2(this.dimensions.X / 2, 100), Color.White));
             this.textDisplays.Add(new TextDisplay(this.game, "Created by: Marshal Taylor", new Vector2(this.dimensions.X / 2, 200), Color.White));
+            this.textDisplays.Add(new TextDisplay(this.game, "Music From: https://soundimage.org/puzzle-music/", new Vector2(this.dimensions.X / 2, 250), Color.White));
+            this.textDisplays.Add(new TextDisplay(this.game, "Sound Effects: PixaBay", new Vector2(this.dimensions.X / 2, 300), Color.White));
             for (int i = 0; i < this.textDisplays.Count; i++)
             {
                 this.textDisplays[i].Center();

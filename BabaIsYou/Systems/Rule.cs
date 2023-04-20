@@ -1,6 +1,8 @@
 ﻿using BabaIsYou.Components;
 using BabaIsYou.Entities;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Content;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,16 +15,48 @@ namespace BabaIsYou.Systems
     {
         private Level _level;
         private Game1 _game;
-        
-        public Rule(Game1 game, Level level)
+
+        ContentManager contentManager;
+        private bool _hasNewWin;
+        private SoundEffect _newWinEffect;
+
+        private HashSet<NounType> _isWin = new();
+        private HashSet<NounType> _previousIsWin = new();
+
+        public Rule(Game1 game, Level level, ContentManager content)
         {
             this._level = level;
             this._game = game;
+            this.contentManager = content;
+            this.LoadContent();
         }
         public override void Update(GameTime gameTime)
         {
             ClearRules();
             UpdateRules();
+
+            ProcessIsWin();
+        }
+        public void Start() 
+        {
+            UpdateRules();
+            _previousIsWin.UnionWith(_isWin);
+            _isWin.Clear();
+        }
+
+        private void ProcessIsWin()
+        {
+            if (!_previousIsWin.SetEquals(_isWin))
+            {
+                this._newWinEffect.Play();
+            }
+            _previousIsWin.Clear();
+            _previousIsWin.UnionWith(_isWin);
+            _isWin.Clear();
+        }
+        private void LoadContent()
+        {
+            this._newWinEffect = contentManager.Load<SoundEffect>("Sounds/new_win");
         }
 
         public void UpdateRules()
@@ -120,6 +154,12 @@ namespace BabaIsYou.Systems
 
                 var property = entity.GetComponent<Property>();
                 property.AddPropertyType(propertyType);
+
+
+                if (propertyType == PropertyType.Win)
+                {
+                    _isWin.Add(nounType);
+                }
 
             }
         }

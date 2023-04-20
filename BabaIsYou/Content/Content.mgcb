@@ -68,6 +68,42 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/arial.spritefont
 
+#begin Sounds/8-Bit-Puzzler.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Sounds/8-Bit-Puzzler.mp3
+
+#begin Sounds/move.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/move.mp3
+
+#begin Sounds/Mysterious-Puzzle_Looping.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Sounds/Mysterious-Puzzle_Looping.mp3
+
+#begin Sounds/new_win.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/new_win.mp3
+
+#begin Sounds/Puzzle-Game-3_Looping.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Sounds/Puzzle-Game-3_Looping.mp3
+
+#begin Sounds/win.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/win.mp3
+
 #begin Things/baba.png
 /importer:TextureImporter
 /processor:TextureProcessor

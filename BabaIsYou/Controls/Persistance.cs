@@ -14,6 +14,8 @@ namespace BabaIsYou.Controls
     {
         public bool saving = false;
         public bool loading = false;
+
+        public InputMap inputMap = null;
         public void SaveGameState(InputMap inputMap)
         {
             lock (this)
@@ -23,6 +25,7 @@ namespace BabaIsYou.Controls
                     saving = true;
                     //
                     // Create something to save
+                    this.inputMap = inputMap;
                     FinalizeSaveAsync(inputMap);
                 }
             }
@@ -69,7 +72,6 @@ namespace BabaIsYou.Controls
                 }
             }
         }
-        public InputMap inputMap = new InputMap();
 
         private async void FinalizeLoadAsync()
         {

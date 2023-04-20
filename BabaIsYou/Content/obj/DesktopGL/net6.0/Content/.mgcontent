@@ -9,6 +9,12 @@
     <File>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/Background/grass.png</File>
     <File>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/Background/hedge.png</File>
     <File>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/Fonts/arial.spritefont</File>
+    <File>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/Sounds/8-Bit-Puzzler.mp3</File>
+    <File>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/Sounds/move.mp3</File>
+    <File>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/Sounds/Mysterious-Puzzle_Looping.mp3</File>
+    <File>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/Sounds/new_win.mp3</File>
+    <File>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/Sounds/Puzzle-Game-3_Looping.mp3</File>
+    <File>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/Sounds/win.mp3</File>
     <File>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/Things/baba.png</File>
     <File>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/Things/flag.png</File>
     <File>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/Things/floor.png</File>
@@ -34,6 +40,12 @@
     <File>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/Words/word-you.png</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

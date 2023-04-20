@@ -4,6 +4,7 @@ using BabaIsYou.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -24,6 +25,8 @@ namespace BabaIsYou.Views
         private Systems.Rule m_sysRule;
         private Systems.AnimatedSprite m_sysAnimatedSprite;
         private Systems.Level m_sysLevel;
+
+        private Song _music;
         public GameLevel(Game1 game, String levelName): base(game)
         {
             this.Init(levelName);
@@ -43,14 +46,23 @@ namespace BabaIsYou.Views
             this.m_addThese = this.m_sysLevel.Entities();
             this.m_sysLevel.ClearCurrentEntities();
             m_sysRenderer = new Systems.Renderer((int)dimensions.X, (int)dimensions.Y, m_sysLevel);
-            m_sysKeyboardInput = new Systems.Input(this.game.inputMap.actionMap);
-            m_sysMovement = new Systems.Movement(m_sysLevel);
-            m_sysRule = new Systems.Rule(this.game, m_sysLevel);
+            m_sysKeyboardInput = new Systems.Input(this.game.inputMap.GetActionMap());
+            m_sysMovement = new Systems.Movement(m_sysLevel, this.game.Content);
+            m_sysRule = new Systems.Rule(this.game, m_sysLevel, this.game.Content);
             m_sysAnimatedSprite = new Systems.AnimatedSprite();
 
             AddAndRemoveEntities();
 
             m_sysLevel.Start();
+            m_sysRule.Start();
+            this.LoadContent();
+            MediaPlayer.Stop();
+            MediaPlayer.Play(this._music);
+        }
+
+        protected override void LoadContent()
+        {
+            this._music = this.game.Content.Load<Song>("Sounds/Puzzle-Game-3_Looping");
         }
 
         private void AddAndRemoveEntities()

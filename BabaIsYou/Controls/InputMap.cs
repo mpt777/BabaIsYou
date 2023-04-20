@@ -12,17 +12,30 @@ namespace BabaIsYou.Controls
     [DataContract(Name = "InputMap")]
     public class InputMap
     {
-        public InputMap() 
-        {
-            this.actionMap = new Dictionary<Action, Keys>() { { Action.Up, Keys.Up }, { Action.Right, Keys.Right }, { Action.Down, Keys.Down }, { Action.Left, Keys.Left }, { Action.Undo, Keys.Z }, { Action.Reset, Keys.R } };
-        }
+        private Persistance _persistance;
 
         [DataMember()]
-        public Dictionary<Action, Keys> actionMap { get; private set; }
+        private Dictionary<Action, Keys> _actionMap { get; set; }
+        public InputMap()
+        {
+            this._persistance = new Persistance();
+            this._actionMap = new Dictionary<Action, Keys>() { { Action.Up, Keys.W }, { Action.Right, Keys.D }, { Action.Down, Keys.S }, { Action.Left, Keys.A }, { Action.Undo, Keys.Z }, { Action.Reset, Keys.R } };
+            this._persistance.LoadGameState();
+        }
+
+        public Dictionary<Action, Keys> GetActionMap()
+        {
+            if (this._persistance.inputMap == null)
+            {
+                return this._actionMap;
+            }
+            return this._persistance.inputMap._actionMap;
+        }
 
         public void UpdateInputMapping(Action action, Keys newKey)
         {
-            actionMap[action] = newKey;
+            _actionMap[action] = newKey;
+            this._persistance.SaveGameState(this);
         }
 
     }

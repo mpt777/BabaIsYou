@@ -103,6 +103,7 @@ namespace BabaIsYou.Systems
         {
             this.SetPreviousState(m_entities.Values.ToList());
             SetInitialState(this.m_entities.Values.ToList());
+            this.FillTileSet();
         }
         private void PushUndoLayer()
         {

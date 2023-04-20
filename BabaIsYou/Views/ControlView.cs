@@ -31,7 +31,7 @@ namespace BabaIsYou.Views
             int i = 0;
             foreach (Systems.Action action in Enum.GetValues(typeof(Systems.Action)))
             {
-                TextDisplay t = new TextDisplay(this.game, $"{action} : {this.game.inputMap.actionMap[action]}", new Vector2(this.dimensions.X / 2, 200 + (50 * i)), "arial", Color.White, Color.Orange);
+                TextDisplay t = new TextDisplay(this.game, $"{action} : {this.game.inputMap.GetActionMap()[action]}", new Vector2(this.dimensions.X / 2, 200 + (50 * i)), "arial", Color.White, Color.Orange);
                 this.textDisplays.Add(t);
                 _actionUI[t] = action;
                 i++;

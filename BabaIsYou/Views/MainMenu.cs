@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework.Media;
 
 namespace BabaIsYou.Views
 {
@@ -44,6 +45,7 @@ namespace BabaIsYou.Views
             this.viewCredit.Center();
             this.quit.Center();
         }
+
         public override void Update(GameTime gameTime)
         {
             if (this.game.keyboard.JustPressed(Keys.Escape))

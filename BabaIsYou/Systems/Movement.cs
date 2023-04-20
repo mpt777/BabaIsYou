@@ -2,7 +2,10 @@
 using BabaIsYou.Entities;
 using Breakout;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -24,28 +27,88 @@ namespace BabaIsYou.Systems
         private bool _hasUpdated = false;
         public LevelState levelState { get; private set; }
         CustomKeyboard keyboard = new CustomKeyboard();
+        ContentManager contentManager;
 
-        public Movement(Level level) 
+        private SoundEffect _moveEffect;
+        
+        private SoundEffect _winEffect;
+        private bool _hasYouMoved;
+
+        private SoundEffect _newWinEffect;
+
+        private HashSet<NounType> _isWin = new();
+        private HashSet<NounType> _previousIsWin = new();
+
+
+        public Movement(Level level, ContentManager content)
         {
             this._level = level;
+            this.contentManager = content;
+            this.LoadContent();
+        }
+        private void LoadContent()
+        {
+            this._moveEffect = contentManager.Load<SoundEffect>("Sounds/move");
+            this._newWinEffect = contentManager.Load<SoundEffect>("Sounds/new_win");
+            this._winEffect = contentManager.Load<SoundEffect>("Sounds/win");
         }
         public override void Update(GameTime gameTime)
         {
             keyboard.GetKeyboardState();
             this._hasUpdated = false;
+            this._hasYouMoved = false;
             foreach (var entity in m_entities.Values)
             {
                 MoveEntity(entity, gameTime);
             }
+
+            if (this._hasYouMoved)
+            {
+                this._moveEffect.Play();
+            }
+            //ProcessIsWin();
         }
         public bool HasUpdated()
         {
             return this._hasUpdated;
         }
 
+        private void CheckYouMoved(Entity entity)
+        {
+            if (this._hasYouMoved) { return; }
+            if (!entity.HasComponent<Components.Property>()) { return; }
+            var property = entity.GetComponent<Components.Property>();
+            if (property == null) { return; }
+            if (!property.HasPropertyType(PropertyType.You)) { return; }
+            this._hasYouMoved = true;
+        }
+        //private void ProcessIsWin()
+        //{
+        //    if (!_previousIsWin.SetEquals(_isWin) && _previousIsWin.Count > 0)
+        //    {
+        //        this._newWinEffect.Play();
+        //    }
+        //    _previousIsWin.Clear();
+        //    _previousIsWin.UnionWith(_isWin);
+        //    _isWin.Clear();
+        //}
+        //private void AddToIsWin(Entity entity)
+        //{
+        //    if (!entity.HasComponent<Components.Property>()) { return; }
+        //    if (!entity.HasComponent<Components.Noun>()) { return; }
+        //    var property = entity.GetComponent<Components.Property>();
+        //    var noun = entity.GetComponent<Components.Noun>();
+        //    if (!property.HasPropertyType(PropertyType.Win)) { return; }
+        //    _isWin.Add(noun.nounType);
+        //}
+
+
         private void MoveEntity(Entity entity, GameTime gameTime)
         {
             var movable = entity.GetComponent<Components.Position>();
+
+            //AddToIsWin(entity);
+
 
             //movable.elapsedInterval -= movable.moveInterval;
             switch (movable.direction)
@@ -68,6 +131,7 @@ namespace BabaIsYou.Systems
         private void Move(Entity entity, int xIncrement, int yIncrement)
         {
             this._hasUpdated = true;
+            CheckYouMoved(entity);
             var position = entity.GetComponent<Components.Position>();
             position.direction = Components.Direction.Stopped;
 
@@ -142,6 +206,7 @@ namespace BabaIsYou.Systems
                 if (otherProperty.HasPropertyType(PropertyType.Win) && property.HasPropertyType(PropertyType.You))
                 {
                     this.levelState = LevelState.Win;
+                    this._winEffect.Play();
                     return true;
                 }
 

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <SourceFile>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/Sounds/Puzzle-Game-3_Looping.mp3</SourceFile>
+  <SourceTime>2023-04-19T18:34:33.7111215-06:00</SourceTime>
+  <DestFile>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/bin/DesktopGL/Content/Sounds/Puzzle-Game-3_Looping.xnb</DestFile>
+  <DestTime>2023-04-19T18:39:59.6046833-06:00</DestTime>
+  <Importer>Mp3Importer</Importer>
+  <ImporterTime>2022-07-26T05:44:56-06:00</ImporterTime>
+  <Processor>SongProcessor</Processor>
+  <ProcessorTime>2022-07-26T05:44:56-06:00</ProcessorTime>
+  <Parameters>
+    <Key>Quality</Key>
+    <Value>Best</Value>
+  </Parameters>
+  <Dependencies />
+  <BuildAsset />
+  <BuildOutput>
+    <string>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/bin/DesktopGL/Content/Sounds/Puzzle-Game-3_Looping.ogg</string>
+  </BuildOutput>
+</PipelineBuildEvent>
