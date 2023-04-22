@@ -33,6 +33,11 @@ namespace BabaIsYou.Views
             this.position = new Vector2(posX, posY);
             this.game = game;
         }
+
+        protected Rectangle Rect()
+        {
+            return new Rectangle((int)this.position.X, (int)this.position.Y, (int)this.position.X + (int)this.dimensions.X, (int)this.position.Y + (int)this.dimensions.Y);
+        }
         virtual protected void LoadContent()
         {
 

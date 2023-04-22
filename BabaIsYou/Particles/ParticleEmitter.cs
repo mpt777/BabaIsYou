@@ -4,9 +4,15 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using BabaIsYou.Utils;
+using BabaIsYou.Components;
 
 namespace BabaIsYou.Particles
 {
+    public enum EmittingArea
+    {
+        Inner,
+        Stroke
+    }
     public class ParticleEmitter
     {
 
@@ -16,18 +22,20 @@ namespace BabaIsYou.Particles
         private Rectangle _rectangle;
         private MyRandom m_random = new MyRandom();
 
+        private EmittingArea _emittingArea;
+
         private TimeSpan _rate;
-        private int _sarticleSize;
-        private int _speed;
+        private int _particleSize;
+        private float _speed;
         private TimeSpan _lifetime;
 
         public Vector2 Gravity { get; set; }
 
-        public ParticleEmitter(ContentManager content, TimeSpan rate, Rectangle rect, int size, int speed, TimeSpan lifetime, Texture2D tex, TimeSpan emittingTime)
+        public ParticleEmitter(ContentManager content, TimeSpan rate, Rectangle rect, int size, float speed, TimeSpan lifetime, Texture2D tex, TimeSpan emittingTime)
         {
             _rate = rate;
             _rectangle = rect;
-            _sarticleSize = size;
+            _particleSize = size;
             _speed = speed;
             _lifetime = lifetime;
             _texture = tex;
@@ -47,40 +55,66 @@ namespace BabaIsYou.Particles
         /// Generates new particles, updates the state of existing ones and retires expired particles.
         /// </summary>
         /// 
+        public void SetEmittingArea(EmittingArea area)
+        {
+            this._emittingArea = area;
+        }
+        private Vector2 RandomPosition()
+        {
+            int x = this._rectangle.X + m_random.Next(this._rectangle.Width);
+            int y = this._rectangle.Y + m_random.Next(this._rectangle.Height);
+
+            return new Vector2(x,y);
+        }
+        private Vector2 StrokePosition()
+        {
+            int side = m_random.Next(4);
+            int x = 0;
+            int y = 0;
+            switch (side)
+            {
+                case 0: // Top side
+                    x = this._rectangle.X + m_random.Next(this._rectangle.Width);
+                    y = this._rectangle.Y;
+                    break;
+                case 1: // Right side
+                    x = this._rectangle.X + this._rectangle.Width - 1;
+                    y = this._rectangle.Y + m_random.Next(this._rectangle.Height);
+                    break;
+                case 2: // Bottom side
+                    x = this._rectangle.X + m_random.Next(this._rectangle.Width);
+                    y = this._rectangle.Y + this._rectangle.Height - 1;
+                    break;
+                case 3: // Left side
+                    x = this._rectangle.X;
+                    y = this._rectangle.Y + m_random.Next(this._rectangle.Height);
+                    break;
+            }
+            return new Vector2(x, y);
+        }
         public void CreateParticles()
         {
             while (m_accumulated > _rate)
             {
                 m_accumulated -= _rate;
 
-                int side = m_random.Next(4);
-
-                // Generate a random position along the chosen side
-                int x = 0;
-                int y = 0;
-                switch (side)
+                Vector2 pos = new Vector2(0,0);
+                switch (_emittingArea)
                 {
-                    case 0: // Top side
-                        x = this._rectangle.X + m_random.Next(this._rectangle.Width);
-                        y = this._rectangle.Y;
+                    case EmittingArea.Inner:
+                        pos = RandomPosition();
                         break;
-                    case 1: // Right side
-                        x = this._rectangle.X + this._rectangle.Width - 1;
-                        y = this._rectangle.Y + m_random.Next(this._rectangle.Height);
-                        break;
-                    case 2: // Bottom side
-                        x = this._rectangle.X + m_random.Next(this._rectangle.Width);
-                        y = this._rectangle.Y + this._rectangle.Height - 1;
-                        break;
-                    case 3: // Left side
-                        x = this._rectangle.X;
-                        y = this._rectangle.Y + m_random.Next(this._rectangle.Height);
+                    case EmittingArea.Stroke:
+                        pos = StrokePosition();
                         break;
                 }
 
+                // Generate a random position along the chosen side
+
+
                 Particle p = new Particle(
                     m_random.Next(),
-                    new Vector2(x, y),
+                    pos,
                     m_random.nextCircleVector(),
                     _speed,
                     _lifetime);
@@ -143,11 +177,11 @@ namespace BabaIsYou.Particles
         /// 
         public bool Finished()
         {
-            return (_totalAccumulated <= this._emittingTime) && (m_particles.Count == 0);
+            return (_totalAccumulated >= this._emittingTime) && (m_particles.Count == 0);
         }
         public void Draw(SpriteBatch spriteBatch)
         {
-            Rectangle r = new Rectangle(0, 0, _sarticleSize, _sarticleSize);
+            Rectangle r = new Rectangle(0, 0, _particleSize, _particleSize);
             foreach (Particle p in m_particles.Values)
             {
 

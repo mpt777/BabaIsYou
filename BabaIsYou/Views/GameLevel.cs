@@ -1,5 +1,6 @@
 ﻿using BabaIsYou.Entities;
 using BabaIsYou.Systems;
+using BabaIsYou.Utils;
 using BabaIsYou.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -19,6 +20,10 @@ namespace BabaIsYou.Views
         private List<Entity> m_removeThese = new List<Entity>();
         private List<Entity> m_addThese = new List<Entity>();
 
+        private TextDisplay _winText;
+
+        private bool _isActive = true;
+
         private Systems.Renderer m_sysRenderer;
         private Systems.Input m_sysKeyboardInput;
         private Systems.Movement m_sysMovement;
@@ -26,6 +31,7 @@ namespace BabaIsYou.Views
         private Systems.AnimatedSprite m_sysAnimatedSprite;
         private Systems.Level m_sysLevel;
         private Systems.ParticleSystem m_sysParticleSystem;
+        private Systems.AnimationSystem m_animationSystem;
 
         private Song _music;
         public GameLevel(Game1 game, String levelName): base(game)
@@ -43,6 +49,7 @@ namespace BabaIsYou.Views
 
         private void Init(String levelName)
         {
+            _winText = new TextDisplay(this.game, "", new Vector2((int)dimensions.X / 2, (int)dimensions.Y / 2), "big_arial");
             m_sysLevel = this.game.levelReader.ReadLevel(levelName);
             this.m_addThese = this.m_sysLevel.Entities();
             this.m_sysLevel.ClearCurrentEntities();
@@ -52,7 +59,8 @@ namespace BabaIsYou.Views
             m_sysMovement = new Systems.Movement(m_sysLevel, this.game.Content, m_sysParticleSystem);
             m_sysRule = new Systems.Rule(this.game, m_sysLevel, this.game.Content, m_sysParticleSystem);
             m_sysAnimatedSprite = new Systems.AnimatedSprite();
-            
+            m_animationSystem = new AnimationSystem();
+
             AddAndRemoveEntities();
 
             m_sysLevel.Start();
@@ -112,7 +120,12 @@ namespace BabaIsYou.Views
             {
                 this.game.RemoveFrame();
             }
-
+            m_sysParticleSystem.Update(gameTime); 
+            m_animationSystem.Update(gameTime);
+            if (!_isActive)
+            {
+                return;
+            }
             m_sysKeyboardInput.Update(gameTime);
             List<Systems.Action> actions = m_sysKeyboardInput.Actions();
             foreach (var action in actions)
@@ -121,9 +134,11 @@ namespace BabaIsYou.Views
                 {
                     case Systems.Action.Undo:
                         m_sysLevel.Undo();
+                        m_sysRule.Start();
                         break;
                     case Systems.Action.Reset:
                         m_sysLevel.Reset();
+                        m_sysRule.Start();
                         break;
                 }
             }
@@ -131,7 +146,8 @@ namespace BabaIsYou.Views
             switch (m_sysMovement.levelState)
             {
                 case LevelState.Win:
-                    this.game.RemoveFrame();
+                    this.Win();
+                    //this.game.RemoveFrame();
                     break;
             }
 
@@ -158,14 +174,39 @@ namespace BabaIsYou.Views
             }
 
             m_sysAnimatedSprite.Update(gameTime);
-            m_sysParticleSystem.Update(gameTime);
+            
 
         }
+        private void Win()
+        {
+            _isActive = false;
+            this._winText.SetString("Level Cleared");
+            this._winText.Center();
 
+            this.m_sysParticleSystem.Fireworks(Rect(), Color.Red);
+            this.m_sysParticleSystem.Fireworks(Rect(), Color.Blue);
+            this.m_sysParticleSystem.Fireworks(Rect(), Color.Purple);
+            this.m_sysParticleSystem.Fireworks(Rect(), Color.DarkOrange);
+            
+            m_animationSystem.AddAnimation(new Animation<object>(this.m_sysParticleSystem, "Fireworks", new object[] { Rect(), Color.Red }, new TimeSpan(0,0,0,0,400), false));
+            m_animationSystem.AddAnimation(new Animation<object>(this.m_sysParticleSystem, "Fireworks", new object[] { Rect(), Color.Blue }, new TimeSpan(0,0,0,0,600), false));
+            m_animationSystem.AddAnimation(new Animation<object>(this.m_sysParticleSystem, "Fireworks", new object[] { Rect(), Color.Purple }, new TimeSpan(0,0,0, 0, 700), false));
+            m_animationSystem.AddAnimation(new Animation<object>(this.m_sysParticleSystem, "Fireworks", new object[] { Rect(), Color.Yellow }, new TimeSpan(0,0,0, 0, 500), false));
+            m_animationSystem.AddAnimation(new Animation<object>(this.m_sysParticleSystem, "Fireworks", new object[] { Rect(), Color.DarkOrange }, new TimeSpan(0,0,0, 0, 410), false));
+            m_animationSystem.AddAnimation(new Animation<object>(this.m_sysParticleSystem, "Fireworks", new object[] { Rect(), Color.Pink }, new TimeSpan(0,0,0, 0, 550), false));
+
+
+            //m_animationSystem.AddAnimation(new Animation<object>(this, "CloseWin", new object[] { }, new TimeSpan(0, 0, 0, 5), false));
+        }
+        public void CloseWin()
+        {
+            this.game.RemoveFrame();
+        }
         public override void Draw(SpriteBatch spriteBatch)
         {
             m_sysRenderer.Draw(spriteBatch);
             m_sysParticleSystem.Draw(spriteBatch);
+            this._winText.Draw(spriteBatch);
         }
 
     }

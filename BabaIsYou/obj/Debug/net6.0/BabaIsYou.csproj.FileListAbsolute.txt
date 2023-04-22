@@ -64,3 +64,5 @@ C:\Users\mptay\source\repos\BabaIsYou\BabaIsYou\bin\Debug\net6.0\Content\Sounds\
 C:\Users\mptay\source\repos\BabaIsYou\BabaIsYou\bin\Debug\net6.0\Content\Sounds\win.xnb
 C:\Users\mptay\source\repos\BabaIsYou\BabaIsYou\bin\Debug\net6.0\Content\Sounds\new_win.ogg
 C:\Users\mptay\source\repos\BabaIsYou\BabaIsYou\bin\Debug\net6.0\Content\Sounds\win.ogg
+C:\Users\mptay\source\repos\BabaIsYou\BabaIsYou\bin\Debug\net6.0\Content\Fonts\large_arial.xnb
+C:\Users\mptay\source\repos\BabaIsYou\BabaIsYou\bin\Debug\net6.0\Content\Fonts\big_arial.xnb

@@ -68,6 +68,13 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/arial.spritefont
 
+#begin Fonts/big_arial.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/big_arial.spritefont
+
 #begin Sounds/8-Bit-Puzzler.mp3
 /importer:Mp3Importer
 /processor:SongProcessor

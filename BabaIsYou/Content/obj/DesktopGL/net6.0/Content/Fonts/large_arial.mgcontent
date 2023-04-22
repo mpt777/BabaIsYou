@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <SourceFile>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/Fonts/arial.spritefont</SourceFile>
-  <SourceTime>2023-04-22T12:43:37.5648272-06:00</SourceTime>
-  <DestFile>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/bin/DesktopGL/Content/Fonts/arial.xnb</DestFile>
-  <DestTime>2023-04-22T12:45:01.5560084-06:00</DestTime>
+  <SourceFile>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/Fonts/large_arial.spritefont</SourceFile>
+  <SourceTime>2023-04-22T12:42:03.5103631-06:00</SourceTime>
+  <DestFile>C:/Users/mptay/source/repos/BabaIsYou/BabaIsYou/Content/bin/DesktopGL/Content/Fonts/large_arial.xnb</DestFile>
+  <DestTime>2023-04-22T12:42:05.7442798-06:00</DestTime>
   <Importer>FontDescriptionImporter</Importer>
   <ImporterTime>2022-07-26T05:44:56-06:00</ImporterTime>
-  <Processor>FontDescriptionProcessor</Processor>
+  <Processor>LocalizedFontProcessor</Processor>
   <ProcessorTime>2022-07-26T05:44:56-06:00</ProcessorTime>
   <Parameters>
     <Key>PremultiplyAlpha</Key>

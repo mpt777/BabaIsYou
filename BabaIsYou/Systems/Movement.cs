@@ -58,6 +58,7 @@ namespace BabaIsYou.Systems
             keyboard.GetKeyboardState();
             this._hasUpdated = false;
             this._hasYouMoved = false;
+            this.levelState = LevelState.None;
             foreach (var entity in m_entities.Values)
             {
                 MoveEntity(entity, gameTime);
@@ -109,6 +110,7 @@ namespace BabaIsYou.Systems
         private void Move(Entity entity, int xIncrement, int yIncrement)
         {
             this._hasUpdated = true;
+            
             CheckYouMoved(entity);
             var position = entity.GetComponent<Components.Position>();
             position.direction = Components.Direction.Stopped;

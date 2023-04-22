@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,12 +18,11 @@ namespace BabaIsYou.Systems
         private Game1 _game;
 
         ContentManager contentManager;
-        private bool _hasNewWin;
         private SoundEffect _newWinEffect;
 
-        private HashSet<NounType> _isWin = new();
-        private HashSet<NounType> _previousIsWin = new();
         private ParticleSystem _particleSystem;
+
+        private List<PropertyTypeManager> _propertyTypeManagers = new();
 
         public Rule(Game1 game, Level level, ContentManager content, ParticleSystem particleSystem)
         {
@@ -31,31 +31,46 @@ namespace BabaIsYou.Systems
             this.contentManager = content;
             this._particleSystem = particleSystem;
             this.LoadContent();
+            _propertyTypeManagers.Add(new PropertyTypeManager(PropertyType.Win, this._newWinEffect, _particleSystem.ObjectIsWin));
+            _propertyTypeManagers.Add(new PropertyTypeManager(PropertyType.You, _particleSystem.ObjectIsYou));
         }
         public override void Update(GameTime gameTime)
         {
             ClearRules();
             UpdateRules();
 
-            ProcessIsWin();
+            ProcessNounTypes();
         }
         public void Start() 
         {
             UpdateRules();
-            _previousIsWin.UnionWith(_isWin);
-            _isWin.Clear();
+            StartNounTypes();
+        }
+        public void StartNounTypes()
+        {
+            foreach (PropertyTypeManager p in _propertyTypeManagers)
+            {
+                p.Start();
+            }
+        }
+        public void ProcessNounTypes()
+        {
+            foreach(PropertyTypeManager p in _propertyTypeManagers)
+            {
+                p.Process(m_entities.Values.ToList());
+            }
+        }
+        public void AddNounType(PropertyType propertyType, NounType nounType)
+        {
+            foreach (PropertyTypeManager p in _propertyTypeManagers)
+            {
+                if (p.PropertyType() == propertyType)
+                {
+                    p.AddNounType(nounType);
+                }
+            }
         }
 
-        private void ProcessIsWin()
-        {
-            if (!_previousIsWin.SetEquals(_isWin))
-            {
-                this._newWinEffect.Play();
-            }
-            _previousIsWin.Clear();
-            _previousIsWin.UnionWith(_isWin);
-            _isWin.Clear();
-        }
         private void LoadContent()
         {
             this._newWinEffect = contentManager.Load<SoundEffect>("Sounds/new_win");
@@ -158,10 +173,8 @@ namespace BabaIsYou.Systems
                 property.AddPropertyType(propertyType);
 
 
-                if (propertyType == PropertyType.Win)
-                {
-                    _isWin.Add(nounType);
-                }
+                AddNounType(propertyType, nounType);
+
 
             }
         }
