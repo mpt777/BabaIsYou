@@ -25,6 +25,7 @@ namespace BabaIsYou.Views
         private Systems.Rule m_sysRule;
         private Systems.AnimatedSprite m_sysAnimatedSprite;
         private Systems.Level m_sysLevel;
+        private Systems.ParticleSystem m_sysParticleSystem;
 
         private Song _music;
         public GameLevel(Game1 game, String levelName): base(game)
@@ -46,11 +47,12 @@ namespace BabaIsYou.Views
             this.m_addThese = this.m_sysLevel.Entities();
             this.m_sysLevel.ClearCurrentEntities();
             m_sysRenderer = new Systems.Renderer((int)dimensions.X, (int)dimensions.Y, m_sysLevel);
+            m_sysParticleSystem = new Systems.ParticleSystem(this.game, this.m_sysRenderer);
             m_sysKeyboardInput = new Systems.Input(this.game.inputMap.GetActionMap());
-            m_sysMovement = new Systems.Movement(m_sysLevel, this.game.Content);
-            m_sysRule = new Systems.Rule(this.game, m_sysLevel, this.game.Content);
+            m_sysMovement = new Systems.Movement(m_sysLevel, this.game.Content, m_sysParticleSystem);
+            m_sysRule = new Systems.Rule(this.game, m_sysLevel, this.game.Content, m_sysParticleSystem);
             m_sysAnimatedSprite = new Systems.AnimatedSprite();
-
+            
             AddAndRemoveEntities();
 
             m_sysLevel.Start();
@@ -156,13 +158,14 @@ namespace BabaIsYou.Views
             }
 
             m_sysAnimatedSprite.Update(gameTime);
+            m_sysParticleSystem.Update(gameTime);
 
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            //m_sysRenderer.Update();
             m_sysRenderer.Draw(spriteBatch);
+            m_sysParticleSystem.Draw(spriteBatch);
         }
 
     }

@@ -5,7 +5,7 @@ using BabaIsYou.Entities.Things;
 using BabaIsYou.Entities.Words;
 using BabaIsYou.Systems;
 using BabaIsYou.Views;
-using Breakout;
+using BabaIsYou.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;

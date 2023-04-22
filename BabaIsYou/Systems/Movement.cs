@@ -1,6 +1,6 @@
 ﻿using BabaIsYou.Components;
 using BabaIsYou.Entities;
-using Breakout;
+using BabaIsYou.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -38,12 +38,13 @@ namespace BabaIsYou.Systems
 
         private HashSet<NounType> _isWin = new();
         private HashSet<NounType> _previousIsWin = new();
+        private ParticleSystem _particleSystem;
 
-
-        public Movement(Level level, ContentManager content)
+        public Movement(Level level, ContentManager content, ParticleSystem particleSystem)
         {
             this._level = level;
             this.contentManager = content;
+            this._particleSystem = particleSystem;
             this.LoadContent();
         }
         private void LoadContent()
@@ -82,35 +83,12 @@ namespace BabaIsYou.Systems
             if (!property.HasPropertyType(PropertyType.You)) { return; }
             this._hasYouMoved = true;
         }
-        //private void ProcessIsWin()
-        //{
-        //    if (!_previousIsWin.SetEquals(_isWin) && _previousIsWin.Count > 0)
-        //    {
-        //        this._newWinEffect.Play();
-        //    }
-        //    _previousIsWin.Clear();
-        //    _previousIsWin.UnionWith(_isWin);
-        //    _isWin.Clear();
-        //}
-        //private void AddToIsWin(Entity entity)
-        //{
-        //    if (!entity.HasComponent<Components.Property>()) { return; }
-        //    if (!entity.HasComponent<Components.Noun>()) { return; }
-        //    var property = entity.GetComponent<Components.Property>();
-        //    var noun = entity.GetComponent<Components.Noun>();
-        //    if (!property.HasPropertyType(PropertyType.Win)) { return; }
-        //    _isWin.Add(noun.nounType);
-        //}
 
 
         private void MoveEntity(Entity entity, GameTime gameTime)
         {
             var movable = entity.GetComponent<Components.Position>();
 
-            //AddToIsWin(entity);
-
-
-            //movable.elapsedInterval -= movable.moveInterval;
             switch (movable.direction)
             {
                 case Components.Direction.Up:
@@ -215,6 +193,7 @@ namespace BabaIsYou.Systems
                     Debug.Print("Defeat!");
                     _removeThese.Add(entity);
                     this.levelState = LevelState.Defeat;
+                    _particleSystem.ObjectDeath(entity);
                     return true;
                 }
 
@@ -235,6 +214,8 @@ namespace BabaIsYou.Systems
                     Debug.Print("Sink!");
                     _removeThese.Add(entity);
                     _removeThese.Add(otherEntity);
+                    _particleSystem.ObjectDeath(entity);
+                    _particleSystem.ObjectDeath(otherEntity);
                     return true;
                 }
 

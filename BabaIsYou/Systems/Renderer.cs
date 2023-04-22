@@ -10,7 +10,7 @@ using BabaIsYou.Entities;
 namespace BabaIsYou.Systems
 {
 
-    class Renderer : System
+    public class Renderer : System
     {
         private readonly int GRID_SIZE;
         private readonly int CELL_SIZE;
@@ -24,7 +24,18 @@ namespace BabaIsYou.Systems
             OFFSET_X = (width - (GRID_SIZE * level.Width())) / 2;
             OFFSET_Y = (height - (GRID_SIZE * level.Height())) / 2;
         }
-
+        public int GridSize() 
+        {
+            return GRID_SIZE;
+        }
+        public int LevelXScreen(int x)
+        {
+            return (int)((x * GRID_SIZE) + OFFSET_X);
+        }
+        public int LevelYScreen(int y)
+        {
+            return (int)((y * GRID_SIZE) + OFFSET_Y);
+        }
         public override void Update(GameTime gameTime)
         {
             //m_spriteBatch.Begin(SpriteSortMode.BackToFront);

@@ -22,12 +22,14 @@ namespace BabaIsYou.Systems
 
         private HashSet<NounType> _isWin = new();
         private HashSet<NounType> _previousIsWin = new();
+        private ParticleSystem _particleSystem;
 
-        public Rule(Game1 game, Level level, ContentManager content)
+        public Rule(Game1 game, Level level, ContentManager content, ParticleSystem particleSystem)
         {
             this._level = level;
             this._game = game;
             this.contentManager = content;
+            this._particleSystem = particleSystem;
             this.LoadContent();
         }
         public override void Update(GameTime gameTime)
